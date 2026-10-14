@@ -44,6 +44,8 @@ effectcraft-script = { path = "crates/script" }
 effectcraft-hevcenc = { path = "crates/hevcenc" }
 effectcraft-av1enc = { path = "crates/av1enc" }
 effectcraft-plugin = { path = "crates/plugin" }
+# Suíte FisiLab: identidade visual (paleta, tela de abertura, janela Sobre)
+fisilab-brand = { path = "crates/fisilab-brand" }
 
 # foundation
 thiserror = "2"

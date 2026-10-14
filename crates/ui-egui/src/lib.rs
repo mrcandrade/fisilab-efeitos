@@ -1,4 +1,4 @@
-//! The EffectCraft egui frontend (swappable): docking panels, the Composition viewer, the
+//! The FisiEfeitos (EffectCraft) egui frontend (swappable): docking panels, the Composition viewer, the
 //! Timeline with property twirl-downs and keyframes, Effect Controls, Effects & Presets, Preview,
 //! Info, Character/Paragraph/Align, menus, dialogs and the control channel.
 //!
@@ -46,6 +46,17 @@ use frames::{FrameKey, Frames, RenderSource};
 use serde_json::json;
 use state::UiState;
 use theme::Tokens;
+
+/// FisiEfeitos in the Suíte FisiLab (UFRGS): what the suite's splash screen and About window show.
+pub const APP_INFO: fisilab_brand::AppInfo = fisilab_brand::AppInfo {
+    name: "FisiEfeitos",
+    tagline: "Animação gráfica e composição",
+    equivalent: "Adobe After Effects",
+    version: env!("CARGO_PKG_VERSION"),
+    upstream_name: "EffectCraft",
+    upstream_url: "https://github.com/storytold/effectcraft",
+    upstream_copyright: "© 2026 ArtCraft Team e contribuidores do EffectCraft",
+};
 
 const SCREENSHOT_TIMEOUT_S: f64 = 4.0;
 /// Seconds without a project change before paused prefetch resumes (see
@@ -1912,6 +1923,9 @@ impl eframe::App for EffectcraftApp {
         }
         self.frame(ui);
         let ctx = ui.ctx().clone();
+        // Suíte FisiLab: the About window (when open) and the opening splash, over everything.
+        // Every frame once the fonts are installed, so the splash animation never freezes.
+        fisilab_brand::frame(&ctx, &APP_INFO);
         #[cfg(not(target_arch = "wasm32"))]
         pointer_wrap::finish_native(&ctx, frame);
         // wasm32: no frame threads; render queued frames now, between UI frames.
@@ -2072,6 +2086,33 @@ mod gpu_failure_tests {
 }
 
 #[cfg(test)]
+mod fisilab_tests {
+    /// The engine's suite links (it can't depend on the brand crate) match the brand crate's.
+    #[test]
+    fn engine_links_match_the_suite() {
+        assert_eq!(effectcraft_engine::links::WEBSITE, fisilab_brand::SUITE_URL);
+        assert_eq!(effectcraft_engine::links::MANIFESTO, fisilab_brand::MANIFESTO_URL);
+        assert_eq!(effectcraft_engine::links::APP_NAME, super::APP_INFO.name);
+        assert_eq!(super::APP_INFO.upstream_url, effectcraft_engine::links::GITHUB);
+    }
+
+    /// Help ▸ Sobre a Suíte FisiLab… is in the menu with the suite's label and opens its window.
+    #[test]
+    fn help_menu_opens_the_suite_about_window() {
+        let entries = effectcraft_engine::menus::entries();
+        let (path, entry) = entries.iter().find(|(_, e)| e.command == "help.fisilab").expect("Help ▸ Sobre a Suíte FisiLab…");
+        assert_eq!(path.first().map(String::as_str), Some("Help"));
+        assert_eq!(entry.label, fisilab_brand::ABOUT_MENU_LABEL);
+        let ctx = egui::Context::default();
+        let mut app = super::EffectcraftApp::new(effectcraft_engine::Session::default());
+        assert!(!fisilab_brand::about::is_open(&ctx));
+        crate::menus::invoke(&mut app, &ctx, "help.fisilab", serde_json::json!({})).unwrap();
+        assert!(fisilab_brand::about::is_open(&ctx));
+        assert!(!entries.iter().any(|(_, e)| e.command == "help.discord"));
+    }
+}
+
+#[cfg(test)]
 mod appearance_tests {
     use super::*;
     use crate::theme::ThemeKind;
@@ -2090,13 +2131,13 @@ mod appearance_tests {
         app.set_pref("appearance.darkTheme", json!("darker")).unwrap();
         app.apply_prefs(&ctx);
         assert_eq!(app.ui.theme, ThemeKind::Darker);
-        for (mode, shown) in [("auto", ThemeKind::Darker), ("light", ThemeKind::Light), ("dark", ThemeKind::Darker), ("auto", ThemeKind::Darker)] {
+        for (mode, shown) in [("auto", ThemeKind::Darker), ("light", ThemeKind::UfrgsDia), ("dark", ThemeKind::Darker), ("auto", ThemeKind::Darker)] {
             menus::invoke(&mut app, &ctx, "view.theme.toggle", json!({})).unwrap();
             assert_eq!(app.session.prefs.appearance.appearance_mode, mode);
             assert_eq!(app.ui.theme, shown, "{mode}");
             assert_eq!(app.tokens.kind, shown);
             assert_eq!(app.session.prefs.appearance.dark_theme, "darker");
-            assert_eq!(app.session.prefs.appearance.light_theme, "light");
+            assert_eq!(app.session.prefs.appearance.light_theme, "ufrgsDia");
         }
     }
 
@@ -2112,18 +2153,18 @@ mod appearance_tests {
         app.hooks.system_theme = Some(Box::new(move |_| *read.lock().unwrap_or_else(std::sync::PoisonError::into_inner)));
         app.set_pref("appearance.appearanceMode", json!("auto")).unwrap();
         app.apply_prefs(&ctx);
-        assert_eq!(app.ui.theme, ThemeKind::Light);
+        assert_eq!(app.ui.theme, ThemeKind::UfrgsDia);
         *system.lock().unwrap() = Some(egui::Theme::Dark);
         app.apply_prefs(&ctx);
-        assert_eq!(app.ui.theme, ThemeKind::Dark, "a system change applies without a settings change");
+        assert_eq!(app.ui.theme, ThemeKind::UfrgsNoite, "a system change applies without a settings change");
         *system.lock().unwrap() = None;
         app.apply_prefs(&ctx);
-        assert_eq!(app.ui.theme, ThemeKind::Dark);
+        assert_eq!(app.ui.theme, ThemeKind::UfrgsNoite);
         // A fixed mode ignores the system.
         *system.lock().unwrap() = Some(egui::Theme::Light);
         app.set_pref("appearance.appearanceMode", json!("dark")).unwrap();
         app.apply_prefs(&ctx);
-        assert_eq!(app.ui.theme, ThemeKind::Dark);
+        assert_eq!(app.ui.theme, ThemeKind::UfrgsNoite);
     }
 
     /// Sync with System leaves egui's theme preference at System, so egui never gives the native
@@ -2137,7 +2178,7 @@ mod appearance_tests {
         app.hooks.system_theme = Some(Box::new(|_| Some(egui::Theme::Light)));
         app.set_pref("appearance.appearanceMode", json!("auto")).unwrap();
         app.apply_prefs(&ctx);
-        assert_eq!(app.ui.theme, ThemeKind::Light);
+        assert_eq!(app.ui.theme, ThemeKind::UfrgsDia);
         assert_eq!(ctx.options(|o| o.theme_preference), egui::ThemePreference::System);
         for theme in [egui::Theme::Light, egui::Theme::Dark] {
             assert_eq!(ctx.style_of(theme).visuals.panel_fill, app.tokens.panel_bg, "{theme:?}");
@@ -2153,6 +2194,23 @@ mod appearance_tests {
             assert_eq!(ctx.options(|o| o.theme_preference), pref, "{mode}");
             assert_eq!(ctx.global_style().visuals.panel_fill, app.tokens.panel_bg, "{mode}");
         }
+    }
+
+    /// A fresh install shows the Suíte FisiLab theme "UFRGS Noite"; "UFRGS Dia" is the light one.
+    #[test]
+    fn a_fresh_install_shows_ufrgs_noite() {
+        let ctx = egui::Context::default();
+        let mut app = app();
+        app.apply_prefs(&ctx);
+        assert_eq!(app.ui.theme, ThemeKind::UfrgsNoite);
+        assert_eq!(app.tokens.kind, ThemeKind::UfrgsNoite);
+        assert_eq!(ctx.global_style().visuals.panel_fill, fisilab_brand::palette::NOITE.painel);
+        menus::invoke(&mut app, &ctx, "view.theme.ufrgsDia", json!({})).unwrap();
+        assert_eq!(app.ui.theme, ThemeKind::UfrgsDia);
+        assert_eq!(app.session.prefs.appearance.appearance_mode, "light");
+        menus::invoke(&mut app, &ctx, "view.theme.ufrgsNoite", json!({})).unwrap();
+        assert_eq!(app.ui.theme, ThemeKind::UfrgsNoite);
+        assert_eq!(app.session.prefs.appearance.appearance_mode, "dark");
     }
 
     /// Picking a theme (`view.theme.*`, `ui.set {theme}`) fixes the mode to its family.

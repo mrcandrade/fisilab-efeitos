@@ -50,6 +50,8 @@ pub const UI_COMMANDS: &[UiCommand] = &[
     uic!("view.transparencyGrid", "Transparency Grid", [], None),
     uic!("view.fastPreviews", "Fast Previews", [], None),
     uic!("view.theme.toggle", "Next Appearance Mode", [], None),
+    uic!("view.theme.ufrgsNoite", "Tema: UFRGS Noite", [], None),
+    uic!("view.theme.ufrgsDia", "Tema: UFRGS Dia", [], None),
     uic!("view.theme.dark", "Theme: Dark", [], None),
     uic!("view.theme.darker", "Theme: Darker", [], None),
     uic!("view.theme.light", "Theme: Light", [], None),
@@ -827,7 +829,7 @@ const COPY_COMMANDS: &[&str] =
 /// hold something: with nothing on it, the windowing layer sends no paste event for Ctrl+V.
 fn clipboard_note(s: &effectcraft_engine::Session) -> String {
     let st = &s.state;
-    let n = |n: usize, one: &str, many: &str| format!("EffectCraft: {n} {}", if n == 1 { one } else { many });
+    let n = |n: usize, one: &str, many: &str| format!("FisiEfeitos: {n} {}", if n == 1 { one } else { many });
     if st.clip_is_keys && !st.key_clipboard.is_empty() {
         n(st.key_clipboard.iter().map(|c| c.keys.len()).sum(), "keyframe", "keyframes")
     } else if !st.effect_clipboard.is_empty() {
@@ -835,7 +837,7 @@ fn clipboard_note(s: &effectcraft_engine::Session) -> String {
     } else if !st.contents_clipboard.is_empty() {
         n(st.contents_clipboard.len(), "shape item", "shape items")
     } else if st.link_clipboard.is_some() {
-        "EffectCraft: property links".into()
+        "FisiEfeitos: property links".into()
     } else {
         n(st.clipboard.len(), "layer", "layers")
     }
@@ -892,6 +894,11 @@ pub fn frontend(app: &mut EffectcraftApp, ctx: &egui::Context, id: &str, p: Valu
         }
         "app.about" => {
             app.dialog = Some(crate::Dialog::About);
+            Value::Null
+        }
+        // Help ▸ Sobre a Suíte FisiLab…: the suite's About window (drawn by fisilab_brand::frame).
+        "help.fisilab" => {
+            fisilab_brand::about::open(ctx);
             Value::Null
         }
         // Window ▸ <ScriptUI panel>: dock (or bring forward) the panel the script built.

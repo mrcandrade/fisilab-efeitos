@@ -1,15 +1,16 @@
 [package]
 name = "effectcraft-cli"
-description = "EffectCraft headless CLI: render frames and sequences, run commands, MCP server"
+description = "FisiEfeitos (EffectCraft) headless CLI: render frames and sequences, run commands, MCP server"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+default-run = "fisiefeitos-cli"
 
 [lints]
 workspace = true
 
 [[bin]]
-name = "effectcraft-cli"
+name = "fisiefeitos-cli"
 path = "src/main.rs"
 
 [dependencies]

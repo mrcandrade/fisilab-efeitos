@@ -138,8 +138,8 @@ var $ = {
   level: 0,
   engineName: "boa",
   get fileName() { return __get("app").scriptName; },
-  get os() { return "EffectCraft"; },
-  get version() { return "EffectCraft scripting"; },
+  get os() { return "FisiEfeitos"; },
+  get version() { return "FisiEfeitos scripting"; },
   get locale() { return "en_US"; },
   // Evaluates the file in the global scope and returns its last value (`timeout` is ignored).
   evalFile: function (file, timeout) { return __evalFile(__str(file)); },
@@ -164,7 +164,7 @@ function BridgeTalk() {
   this.onTimeout = null;
 }
 BridgeTalk.prototype.send = function () {
-  throw __err("BridgeTalk: sending messages to other applications is not supported in EffectCraft");
+  throw __err("BridgeTalk: sending messages to other applications is not supported in FisiEfeitos");
 };
 BridgeTalk.prototype.sendResult = BridgeTalk.prototype.send;
 BridgeTalk.prototype.toString = function () { return "[object BridgeTalk]"; };
@@ -179,7 +179,7 @@ BridgeTalk.__isSelf = function (spec) { return String(spec === undefined || spec
 BridgeTalk.isRunning = function (spec) { return BridgeTalk.__isSelf(spec); };
 BridgeTalk.launch = function (spec) { return BridgeTalk.__isSelf(spec); };
 BridgeTalk.getSpecifier = function (name) { return BridgeTalk.__isSelf(name) ? BridgeTalk.appSpecifier : null; };
-BridgeTalk.getDisplayName = function (spec) { return BridgeTalk.__isSelf(spec) ? "EffectCraft" : null; };
+BridgeTalk.getDisplayName = function (spec) { return BridgeTalk.__isSelf(spec) ? "FisiEfeitos" : null; };
 BridgeTalk.getTargets = function () { return [BridgeTalk.appName]; };
 BridgeTalk.getStatus = function (spec) { return spec === undefined || BridgeTalk.__isSelf(spec) ? "IDLE" : "ISNOTINSTALLED"; };
 BridgeTalk.bringToFront = function () {};
@@ -279,7 +279,7 @@ File.openDialog = function () { return null; };
 File.saveDialog = function () { return null; };
 File.decode = function (s) { return decodeURIComponent(s); };
 File.encode = function (s) { return encodeURIComponent(s); };
-File.fs = "EffectCraft";
+File.fs = "FisiEfeitos";
 
 function Folder(path) {
   if (!(this instanceof Folder)) return new Folder(path);

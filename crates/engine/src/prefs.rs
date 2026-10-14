@@ -45,14 +45,16 @@ pub const WINDOW_GRAPHICS: &[(&str, &str)] = &[("Automatic", "auto"), ("OpenGL (
 /// follows the operating system's light or dark appearance.
 pub const APPEARANCE_MODES: &[(&str, &str)] = &[("Sync with System", "auto"), ("Dark", "dark"), ("Light", "light")];
 
-/// The dark family of themes: (label, `appearance.darkTheme` value).
-pub const DARK_THEMES: &[(&str, &str)] = &[("Dark", "dark"), ("Darker", "darker")];
+/// The dark family of themes: (label, `appearance.darkTheme` value). The Suíte FisiLab theme
+/// "UFRGS Noite" comes first and is the default.
+pub const DARK_THEMES: &[(&str, &str)] = &[("UFRGS Noite", "ufrgsNoite"), ("Dark", "dark"), ("Darker", "darker")];
 
-/// The light family of themes: (label, `appearance.lightTheme` value).
-pub const LIGHT_THEMES: &[(&str, &str)] = &[("Light", "light")];
+/// The light family of themes: (label, `appearance.lightTheme` value). The Suíte FisiLab theme
+/// "UFRGS Dia" comes first and is the default.
+pub const LIGHT_THEMES: &[(&str, &str)] = &[("UFRGS Dia", "ufrgsDia"), ("Light", "light")];
 
 /// Every theme (the legacy single-theme `appearance.theme`).
-pub const THEMES: &[(&str, &str)] = &[("Dark", "dark"), ("Darker", "darker"), ("Light", "light")];
+pub const THEMES: &[(&str, &str)] = &[("UFRGS Noite", "ufrgsNoite"), ("UFRGS Dia", "ufrgsDia"), ("Dark", "dark"), ("Darker", "darker"), ("Light", "light")];
 
 /// The settings whose value must be one of their choices.
 fn choices(key: &str) -> Option<&'static [(&'static str, &'static str)]> {
@@ -94,8 +96,9 @@ macro_rules! page {
 
 page!(General {
     /// Interface language: `system` (the operating system's, where EffectCraft has it, else
-    /// English), or a language code from `LANGUAGES`.
-    language: String = "system".into(),
+    /// English), or a language code from `LANGUAGES`. FisiEfeitos (Suíte FisiLab) starts in
+    /// Brazilian Portuguese.
+    language: String = "pt-br".into(),
     /// Levels of Undo (1–99).
     undo_levels: u32 = 32,
     /// Path Point and Handle Size (px).
@@ -166,16 +169,16 @@ page!(Previews {
 });
 
 page!(Appearance {
-    /// The single theme before appearance modes (`dark`, `darker` or `light`), kept for older
-    /// settings files and automation: setting it picks its family's mode and theme. While the mode
-    /// is Dark or Light it mirrors the theme in use.
-    theme: String = "dark".into(),
+    /// The single theme before appearance modes (`ufrgsNoite`, `ufrgsDia`, `dark`, `darker` or
+    /// `light`), kept for older settings files and automation: setting it picks its family's mode
+    /// and theme. While the mode is Dark or Light it mirrors the theme in use.
+    theme: String = "ufrgsNoite".into(),
     /// `auto` (follow the operating system), `dark` or `light`. New installs stay Dark.
     appearance_mode: String = "dark".into(),
-    /// The theme used in dark appearance: `dark` or `darker`.
-    dark_theme: String = "dark".into(),
-    /// The theme used in light appearance: `light`.
-    light_theme: String = "light".into(),
+    /// The theme used in dark appearance: `ufrgsNoite` (default), `dark` or `darker`.
+    dark_theme: String = "ufrgsNoite".into(),
+    /// The theme used in light appearance: `ufrgsDia` (default) or `light`.
+    light_theme: String = "ufrgsDia".into(),
     /// Theme shortcuts in the appearance context menu.
     favorite_themes: Vec<String> = Vec::new(),
     /// User interface brightness, -1 (darker) … 1 (lighter).
@@ -1152,7 +1155,7 @@ pub fn pages() -> Vec<Page> {
                 s("general.expressionPickWhipCompact", "Expression Pick Whip Writes Compact English", B, true),
                 s("general.createSplitLayersAbove", "Create Split Layers Above Original Layer", B, true),
                 s("general.useSystemColorPicker", "Use System Color Picker", B, false),
-                Note("EffectCraft always uses its own colour picker (the same on every platform and the web)."),
+                Note("FisiEfeitos always uses its own colour picker (the same on every platform and the web)."),
             ],
         },
         Page {
@@ -1164,7 +1167,7 @@ pub fn pages() -> Vec<Page> {
                 s("startup.offerCrashRecovery", "Offer to Open the Latest Auto-Save After a Crash", B, true),
                 s("startup.windowGraphics", "Window Graphics", Kind::Choice(WINDOW_GRAPHICS), true),
                 Note(
-                    "Window Graphics applies from the next launch. When the graphics driver stops EffectCraft as its window opens, the next launch switches to OpenGL.",
+                    "Window Graphics applies from the next launch. When the graphics driver stops FisiEfeitos as its window opens, the next launch switches to OpenGL.",
                 ),
                 Section("Repair"),
                 Button { label: "Reset Settings", command: "prefs.reset", params: "{}" },

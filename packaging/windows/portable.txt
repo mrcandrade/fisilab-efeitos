@@ -1,12 +1,13 @@
-EffectCraft portable mode
+FisiEfeitos - modo portátil (Suíte FisiLab)
 
-While this file sits next to effectcraft.exe, EffectCraft keeps its settings, keyboard shortcuts,
-crash-recovery files, logs and plug-ins in the EffectCraftData folder beside it instead of
-%APPDATA%\EffectCraft. Copy the whole folder to move EffectCraft with its settings.
+Enquanto este arquivo estiver ao lado de fisiefeitos.exe, o FisiEfeitos guarda as configurações,
+os atalhos de teclado, os arquivos de recuperação, os registros (logs) e os plug-ins na pasta
+FisiEfeitosData, ao lado do programa, em vez de %APPDATA%\FisiEfeitos. Copie a pasta inteira para
+levar o FisiEfeitos com as suas configurações.
 
-The disk cache, media cache and conformed audio still go to %LOCALAPPDATA%\EffectCraft unless
-you choose other folders in Edit > Preferences > Disk.
+O cache de disco, o cache de mídia e o áudio conformado continuam em %LOCALAPPDATA%\FisiEfeitos,
+a menos que você escolha outras pastas nas configurações (Disco).
 
-Delete this file to use the normal per-user settings folder (%APPDATA%\EffectCraft) instead.
-If EffectCraftData can't be written (for example on a read-only drive), EffectCraft logs a
-warning and uses %APPDATA%\EffectCraft instead.
+Apague este arquivo para usar a pasta normal de configurações do usuário (%APPDATA%\FisiEfeitos).
+Se não for possível gravar em FisiEfeitosData (por exemplo, num pendrive somente leitura), o
+FisiEfeitos registra um aviso e usa %APPDATA%\FisiEfeitos.

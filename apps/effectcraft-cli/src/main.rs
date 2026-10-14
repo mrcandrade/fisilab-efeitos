@@ -79,7 +79,7 @@ fn write_line(text: std::fmt::Arguments) {
     if let Err(e) = r {
         let _ = STDOUT_FAILED.set(e.kind());
         if e.kind() != std::io::ErrorKind::BrokenPipe {
-            note!("effectcraft-cli: cannot write to stdout: {e}");
+            note!("fisiefeitos-cli: cannot write to stdout: {e}");
         }
     }
 }
@@ -89,7 +89,7 @@ fn stdout_broken() -> bool {
     STDOUT_FAILED.get().is_some_and(|k| *k != std::io::ErrorKind::BrokenPipe)
 }
 
-const USAGE: &str = "usage: effectcraft-cli <info|commands|exec|run|props|get|set|render-frame|render|script|mcp> [args] [--json]
+const USAGE: &str = "usage: fisiefeitos-cli <info|commands|exec|run|props|get|set|render-frame|render|script|mcp> [args] [--json]
   info                                     project + engine summary
   commands [--filter TEXT] [--enabled]     list engine commands
   exec <command-id> [--params JSON]        run one engine command (exec --list: list them, as `commands`)
@@ -266,7 +266,7 @@ fn value_arg(s: &str) -> Value {
 fn main() {
     let raw: Vec<String> = std::env::args().skip(1).collect();
     if matches!(raw.first().map(String::as_str), Some("--version" | "-V" | "version")) {
-        say!("effectcraft-cli {}", env!("CARGO_PKG_VERSION"));
+        say!("fisiefeitos-cli {}", env!("CARGO_PKG_VERSION"));
         return;
     }
     if raw.is_empty() || raw.iter().any(|a| a == "-h" || a == "--help") {
@@ -290,14 +290,14 @@ fn main() {
             if json_out {
                 say!("{}", json!({"error": e}));
             }
-            note!("effectcraft-cli {cmd}: {e}");
+            note!("fisiefeitos-cli {cmd}: {e}");
             std::process::exit(1);
         }
     }
 }
 
 fn fail_usage(e: &str) -> ! {
-    note!("effectcraft-cli: {e}\n{USAGE}");
+    note!("fisiefeitos-cli: {e}\n{USAGE}");
     std::process::exit(2)
 }
 
@@ -456,7 +456,7 @@ fn run(cmd: &str, args: &Args, json_out: bool) -> Result<(), Failure> {
                 emit(&info, true);
             } else {
                 say!(
-                    "EffectCraft {} ({}), {} commands, {} effects",
+                    "FisiEfeitos {} ({}), {} commands, {} effects",
                     info["version"].as_str().unwrap_or(""),
                     info["mode"].as_str().unwrap_or(""),
                     info["commands"],
@@ -1090,7 +1090,7 @@ fn adv3d_bench_comp(p: &mut effectcraft_engine::project::Project) -> Option<Item
     }
     add(p, &comp, LayerSource::Text, &|l| {
         l.switches.three_d = true;
-        let doc = TextDoc { text: "EffectCraft".into(), size: 180.0, fill: [0.95, 0.75, 0.2, 1.0], apply_fill: true, ..Default::default() };
+        let doc = TextDoc { text: "FisiEfeitos".into(), size: 180.0, fill: [0.95, 0.75, 0.2, 1.0], apply_fill: true, ..Default::default() };
         set(l, "text/sourceText", Value::Text(Box::new(doc)));
         let mut next = 900_000u64;
         l.props.children.push(build::extrusion_geometry_options(&mut Ids(&mut next)).into());

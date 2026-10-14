@@ -379,9 +379,12 @@ fn save_and_open_roundtrip() {
 #[test]
 fn help_links_emit_urls() {
     let mut s = Session::default();
-    let r = s.execute("help.discord", json!({})).unwrap();
-    assert_eq!(r["url"], "https://discord.gg/artcraft");
-    assert!(s.drain_events().iter().any(|e| matches!(e, crate::Event::OpenUrl(u) if u.contains("discord"))));
+    let r = s.execute("help.website", json!({})).unwrap();
+    assert_eq!(r["url"], "https://github.com/mrcandrade/larfic/tree/main/suite-fisilab");
+    assert!(s.drain_events().iter().any(|e| matches!(e, crate::Event::OpenUrl(u) if u.contains("suite-fisilab"))));
+    assert_eq!(s.execute("help.manifesto", json!({})).unwrap()["url"], "https://github.com/mrcandrade/larfic/blob/main/suite-fisilab/MANIFESTO.md");
+    assert_eq!(s.execute("help.reportIssue", json!({})).unwrap()["url"], "https://github.com/mrcandrade/fisiefeitos/issues");
+    assert!(s.execute("help.discord", json!({})).is_err(), "no ArtCraft community links");
     assert_eq!(s.execute("help.github", json!({})).unwrap()["url"], "https://github.com/storytold/effectcraft");
 }
 

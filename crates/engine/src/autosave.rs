@@ -17,7 +17,7 @@ use crate::config::{ConfigStore, FileOps, StdFiles};
 use crate::prefs::Prefs;
 
 /// Folder created next to a project for its auto-saves.
-pub const AUTOSAVE_FOLDER: &str = "EffectCraft Auto-Save";
+pub const AUTOSAVE_FOLDER: &str = "FisiEfeitos Auto-Save";
 /// Crash-recovery sentinel in the config store.
 pub const SENTINEL: &str = "session.lock";
 const EXT: &str = "ecproj";

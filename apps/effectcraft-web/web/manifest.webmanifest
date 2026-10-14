@@ -1,6 +1,6 @@
 {
-  "name": "EffectCraft",
-  "short_name": "EffectCraft",
+  "name": "FisiEfeitos",
+  "short_name": "FisiEfeitos",
   "description": "Motion graphics and visual effects compositor, in the browser",
   "id": "./",
   "start_url": "./",

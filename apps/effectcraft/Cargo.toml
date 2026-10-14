@@ -1,10 +1,14 @@
 [package]
 name = "effectcraft"
-description = "EffectCraft desktop app"
+description = "FisiEfeitos (Suíte FisiLab) desktop app, based on EffectCraft"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-default-run = "effectcraft"
+default-run = "fisiefeitos"
+
+[[bin]]
+name = "fisiefeitos"
+path = "src/main.rs"
 
 [lints]
 workspace = true
@@ -13,8 +17,9 @@ workspace = true
 effectcraft-engine = { workspace = true }
 effectcraft-host = { workspace = true }
 effectcraft-ui-egui = { workspace = true }
+fisilab-brand = { workspace = true }
 egui = { workspace = true }
-# `links`: links (Help menu, Discord, Settings) open in the system browser.
+# `links`: links (Help menu, Settings) open in the system browser.
 eframe = { workspace = true, features = ["default_fonts", "wgpu", "accesskit", "links", "wayland", "x11"] }
 serde = { workspace = true }
 serde_json = { workspace = true }

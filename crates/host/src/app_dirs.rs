@@ -1,31 +1,32 @@
-//! Where EffectCraft keeps its per-user data (settings, shortcuts, crash recovery, logs, models,
+//! Where FisiEfeitos keeps its per-user data (settings, shortcuts, crash recovery, logs, models,
 //! plug-ins): the one directory [`config_dir`](crate::config_dir) returns.
 //!
 //! In order:
 //! 1. `EFFECTCRAFT_CONFIG_DIR`, when set (tests, agents, custom setups).
 //! 2. **Portable mode** (#993): a marker file ([`PORTABLE_MARKERS`]) beside the executable puts
-//!    everything in `<exe dir>/EffectCraftData`, so a portable copy on a USB stick leaves nothing in
+//!    everything in `<exe dir>/FisiEfeitosData`, so a portable copy on a USB stick leaves nothing in
 //!    `%APPDATA%`. The Windows portable zip ships with `portable.txt`; the MSI doesn't. If that
 //!    folder can't be written (read-only medium, Program Files), a warning is logged and the
 //!    platform folder is used.
-//! 3. The platform convention: macOS `~/Library/Application Support/EffectCraft`, Windows
-//!    `%APPDATA%\EffectCraft`, Linux `$XDG_CONFIG_HOME/effectcraft` or `~/.config/effectcraft`.
+//! 3. The platform convention: macOS `~/Library/Application Support/FisiEfeitos`, Windows
+//!    `%APPDATA%\FisiEfeitos`, Linux `$XDG_CONFIG_HOME/fisiefeitos` or `~/.config/fisiefeitos`
+//!    (FisiEfeitos keeps its own folders, apart from an EffectCraft install).
 
 use std::ffi::OsString;
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
 /// Files beside the executable that switch on portable mode (either one; contents are ignored).
-pub const PORTABLE_MARKERS: [&str; 2] = ["portable.txt", "EffectCraft.portable"];
+pub const PORTABLE_MARKERS: [&str; 2] = ["portable.txt", "FisiEfeitos.portable"];
 /// The data folder created beside the executable in portable mode.
-pub const PORTABLE_DATA_DIR: &str = "EffectCraftData";
+pub const PORTABLE_DATA_DIR: &str = "FisiEfeitosData";
 
 /// How [`DataDir::dir`] was chosen.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Mode {
     /// `EFFECTCRAFT_CONFIG_DIR`.
     Override,
-    /// `<exe dir>/EffectCraftData`.
+    /// `<exe dir>/FisiEfeitosData`.
     Portable,
     /// The platform's per-user config directory.
     Platform,
@@ -79,12 +80,12 @@ pub fn resolve(env: impl Fn(&str) -> Option<OsString>, exe_dir: Option<&Path>) -
 pub fn platform_dir(env: &impl Fn(&str) -> Option<OsString>) -> Option<PathBuf> {
     let home = || env("HOME").map(PathBuf::from);
     if cfg!(target_os = "macos") {
-        return home().map(|h| h.join("Library/Application Support/EffectCraft"));
+        return home().map(|h| h.join("Library/Application Support/FisiEfeitos"));
     }
     if cfg!(target_os = "windows") {
-        return env("APPDATA").map(|a| PathBuf::from(a).join("EffectCraft"));
+        return env("APPDATA").map(|a| PathBuf::from(a).join("FisiEfeitos"));
     }
-    env("XDG_CONFIG_HOME").map(PathBuf::from).or_else(|| home().map(|h| h.join(".config"))).map(|c| c.join("effectcraft"))
+    env("XDG_CONFIG_HOME").map(PathBuf::from).or_else(|| home().map(|h| h.join(".config"))).map(|c| c.join("fisiefeitos"))
 }
 
 /// The first portable marker file in `exe_dir`, if any.
@@ -138,11 +139,11 @@ mod tests {
         assert!(d.warning.is_none());
         let dir = d.dir.unwrap();
         if cfg!(target_os = "macos") {
-            assert_eq!(dir, root.join("home/Library/Application Support/EffectCraft"));
+            assert_eq!(dir, root.join("home/Library/Application Support/FisiEfeitos"));
         } else if cfg!(target_os = "windows") {
-            assert_eq!(dir, root.join("appdata").join("EffectCraft"));
+            assert_eq!(dir, root.join("appdata").join("FisiEfeitos"));
         } else {
-            assert_eq!(dir, root.join("home/.config/effectcraft"));
+            assert_eq!(dir, root.join("home/.config/fisiefeitos"));
         }
         assert!(!exe.join(PORTABLE_DATA_DIR).exists(), "no portable folder without a marker");
         let _ = std::fs::remove_dir_all(&root);
@@ -152,14 +153,14 @@ mod tests {
     fn either_marker_keeps_everything_beside_the_exe() {
         for marker in PORTABLE_MARKERS {
             let root = temp("portable");
-            let exe = root.join("EffectCraft");
+            let exe = root.join("FisiEfeitos");
             std::fs::create_dir_all(&exe).unwrap();
             std::fs::write(exe.join(marker), b"").unwrap();
             let d = resolve(fake_home(&root), Some(&exe));
             assert_eq!(d.mode, Mode::Portable, "{marker}");
             assert!(d.warning.is_none());
             let dir = d.dir.unwrap();
-            assert_eq!(dir, exe.join("EffectCraftData"));
+            assert_eq!(dir, exe.join("FisiEfeitosData"));
             assert!(dir.is_dir(), "the data folder is created");
             assert_eq!(std::fs::read_dir(&dir).unwrap().count(), 0, "the write probe is removed");
             assert!(!root.join("home").exists() && !root.join("appdata").exists(), "nothing written to the user folder");

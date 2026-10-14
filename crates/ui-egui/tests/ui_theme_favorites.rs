@@ -64,5 +64,5 @@ fn star_controls_save_and_favorite_menu_selects_the_family() {
     assert!(p.y < at(&h, "header.favoriteTheme.darker").y);
     click(&mut h, p, PointerButton::Primary);
     assert_eq!(h.state().session.prefs.appearance.appearance_mode, "light");
-    assert_eq!(h.state().session.prefs.appearance.dark_theme, "dark");
+    assert_eq!(h.state().session.prefs.appearance.dark_theme, "ufrgsNoite");
 }
