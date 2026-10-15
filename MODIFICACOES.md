@@ -3,7 +3,7 @@
 O Efeitos é uma versão modificada do [EffectCraft](https://github.com/storytold/effectcraft)
 (© 2026 ArtCraft Team e contribuidores do EffectCraft, MIT OR Apache-2.0), disponibilizada pelo
 **FisiLab — LARFIC · UFRGS** em parceria com o **CTA — Centro de Tecnologia Acadêmica** como parte
-da **Suíte FisiLab**, para estudantes, professores e técnicos da UFRGS. As modificações são
+da **Suíte FisiLab**, para democratizar o acesso à tecnologia entre os alunos da UFRGS. As modificações são
 © 2026 FisiLab — LARFIC/UFRGS e seguem os mesmos termos (MIT OR Apache-2.0).
 
 Base: EffectCraft 0.10.0 (commit `05955c0`, "Release 0.10.0").
