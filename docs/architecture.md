@@ -585,8 +585,7 @@ targets is made active for that command only. `app.beginUndoGroup`/`endUndoGroup
 steps in between into one named step. Match names (`ADBE Transform Group`, `ADBE Position`,
 `ADBE Gaussian Blur 2`, `ADBE Vector Shape - Rect`…) come from a table in `matchnames.rs`; effect
 parameters are `<effect match name>-0001…`. `File` reads are limited to the project's folder, and
-writes and the network are refused, unless Preferences ▸ Scripting & Expressions ▸ Allow Scripts
-to Write Files and Access Network is on. Entry points: the `script.run` command
+writes and the network are refused, unless the administrator sets `EFFECTCRAFT_ALLOW_SCRIPT_IO=1`. Entry points: the `script.run` command
 (`Session::script`, set by the host), File ▸ Scripts ▸ Run Script File… (`.jsx`/`.js`; `.json`
 command scripts still run as steps), Window ▸ Script Console, `effectcraft-cli script` and the
 MCP `run_script` tool.

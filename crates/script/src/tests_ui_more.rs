@@ -177,7 +177,7 @@ fn essential_graphics_scripting_hooks() {
         path.to_string_lossy()
     );
     assert!(run_code(&mut s, &export, "x.jsx").error.is_some());
-    s.prefs.scripting.allow_scripts_write_files = true;
+    effectcraft_engine::prefs::set_script_io_for_tests(Some(true));
     assert_eq!(run_code(&mut s, &export, "x.jsx").result, json!(true));
     assert!(std::fs::metadata(&path).unwrap().len() > 100);
     // It exists now: no overwrite → false.
@@ -297,8 +297,8 @@ fn sockets_talk_tcp_behind_the_network_preference() {
     );
     // Off: no network.
     let o = run_code(&mut s, &code, "net.jsx");
-    assert!(o.error.unwrap().message.contains("Access Network"));
-    s.prefs.scripting.allow_scripts_write_files = true;
+    assert!(o.error.unwrap().message.contains("EFFECTCRAFT_ALLOW_SCRIPT_IO"));
+    effectcraft_engine::prefs::set_script_io_for_tests(Some(true));
     let o = run_code(&mut s, &code, "net.jsx");
     assert!(o.error.is_none(), "{:?}", o.error);
     assert_eq!(o.result, json!("true|pong:ping|rest|true|false"));
@@ -387,7 +387,7 @@ fn resource_string_parser_edge_cases() {
 #[test]
 fn socket_edge_cases() {
     let mut s = session();
-    s.prefs.scripting.allow_scripts_write_files = true;
+    effectcraft_engine::prefs::set_script_io_for_tests(Some(true));
     // Bad addresses and ports: false with an error, never a throw or crash.
     for host in ["", "nohostport", "127.0.0.1", "127.0.0.1:99999", "[::1", "a:b:c", "127.0.0.1:-5"] {
         let code = format!(

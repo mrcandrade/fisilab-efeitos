@@ -302,6 +302,8 @@ page!(
 );
 
 page!(Scripting {
+    /// Legacy field, kept so old preference files still load. It is IGNORED: scripts get file and
+    /// network access only through [`script_io_allowed`] (administrator override).
     allow_scripts_write_files: bool = false,
     warn_executing_files: bool = true,
     enable_js_debugger: bool = false,
@@ -313,6 +315,39 @@ page!(Scripting {
     word_wrap: bool = false,
     error_banner: bool = true,
 });
+
+/// Environment variable an administrator sets to `1` to let scripts read/write arbitrary files and
+/// open network sockets (Suite FisiLab: never switchable from the UI or from saved preferences).
+pub const ALLOW_SCRIPT_IO_ENV: &str = "EFFECTCRAFT_ALLOW_SCRIPT_IO";
+
+thread_local! {
+    static SCRIPT_IO_TEST: std::cell::Cell<Option<bool>> = const { std::cell::Cell::new(None) };
+}
+
+/// Whether scripts may access arbitrary files and the network. False unless the administrator
+/// override `EFFECTCRAFT_ALLOW_SCRIPT_IO=1` is set; the saved preference is ignored.
+pub fn script_io_allowed() -> bool {
+    if let Some(v) = SCRIPT_IO_TEST.with(|c| c.get()) {
+        return v;
+    }
+    script_io_env_value(std::env::var(ALLOW_SCRIPT_IO_ENV).ok().as_deref())
+}
+
+fn script_io_env_value(v: Option<&str>) -> bool {
+    v.map(str::trim) == Some("1")
+}
+
+/// Test hook's current value on this thread (so a script-host thread can inherit it).
+#[doc(hidden)]
+pub fn script_io_test_hook() -> Option<bool> {
+    SCRIPT_IO_TEST.with(|c| c.get())
+}
+
+/// Test hook: force [`script_io_allowed`] on this thread (`None` restores the environment check).
+#[doc(hidden)]
+pub fn set_script_io_for_tests(v: Option<bool>) {
+    SCRIPT_IO_TEST.with(|c| c.set(v));
+}
 
 impl Scripting {
     /// Whether `other` grants scripts the same as this: Application Scripting (file and network
@@ -1388,7 +1423,8 @@ pub fn pages() -> Vec<Page> {
             title: "Scripting & Expressions",
             items: vec![
                 Section("Application Scripting"),
-                s("scripting.allowScriptsWriteFiles", "Allow Scripts to Write Files and Access Network", B, true),
+                // "Allow Scripts to Write Files and Access Network" is deliberately not offered
+                // (see `script_io_allowed`).
                 s("scripting.warnExecutingFiles", "Warn User When Executing Files", B, true),
                 s("scripting.enableJsDebugger", "Enable JavaScript Debugger", B, false),
                 Section("Expressions Editor"),
@@ -1486,4 +1522,29 @@ pub fn pages_json() -> Value {
         })
         .collect();
     json!(pages)
+}
+
+#[cfg(test)]
+mod script_io_tests {
+    use super::*;
+
+    #[test]
+    fn env_override_is_exactly_one() {
+        assert!(script_io_env_value(Some("1")));
+        assert!(script_io_env_value(Some(" 1 ")));
+        for v in [None, Some(""), Some("0"), Some("true"), Some("yes")] {
+            assert!(!script_io_env_value(v), "{v:?}");
+        }
+    }
+
+    #[test]
+    fn saved_pref_is_ignored_and_not_in_the_ui() {
+        set_script_io_for_tests(None);
+        if std::env::var(ALLOW_SCRIPT_IO_ENV).is_err() {
+            let mut p = Prefs::default();
+            p.scripting.allow_scripts_write_files = true;
+            assert!(!script_io_allowed());
+        }
+        assert!(!pages_json().to_string().contains("allowScriptsWriteFiles"));
+    }
 }

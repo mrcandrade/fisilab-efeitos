@@ -1,8 +1,8 @@
 //! `Socket`: TCP connections for scripts (the JavaScript Tools Guide's Socket object: `open`,
 //! `listen`, `poll`, `read`, `readln`, `write`, `writeln`, `close`, `connected`, `eof`).
 //!
-//! Network access follows Preferences ▸ Scripting & Expressions ▸ Allow Scripts to Write Files
-//! and Access Network: with it off, `new Socket()` throws. On the web there are no raw sockets:
+//! Network access follows the administrator override `EFFECTCRAFT_ALLOW_SCRIPT_IO=1` (the same
+//! gate as script file access; no preference or UI switch): without it, `new Socket()` throws. On the web there are no raw sockets:
 //! `open` and `listen` return false (with `error` set).
 //!
 //! The JavaScript side holds only a handle; the streams live here, keyed by handle, so a script
@@ -19,7 +19,7 @@ pub(crate) fn native_sock(_: &JsValue, args: &[JsValue], ctx: &mut Context) -> J
     let id = args.get(1).cloned().unwrap_or_default().to_number(ctx)? as u32;
     let params = arg_string(args, 2, ctx)?;
     let p: J = serde_json::from_str(&params).unwrap_or(J::Null);
-    let allowed = with_active(|a| Ok(a.session.prefs.scripting.allow_scripts_write_files)).unwrap_or(false);
+    let allowed = with_active(|_| Ok(effectcraft_engine::prefs::script_io_allowed())).unwrap_or(false);
     if !allowed {
         return Err(throw(format!("scripts can't access the network unless {} is on", crate::runtime::GATE)));
     }

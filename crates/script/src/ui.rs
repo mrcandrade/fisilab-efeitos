@@ -313,10 +313,14 @@ pub(crate) fn run_threaded(session: &mut Session, req: &effectcraft_engine::Scri
     let (to_tx, to_rx) = std::sync::mpsc::channel();
     let (from_tx, from_rx) = std::sync::mpsc::channel();
     let (name, code) = (req.name.to_string(), req.code.to_string());
+    let io_hook = effectcraft_engine::prefs::script_io_test_hook();
     let spawned = std::thread::Builder::new()
         .name(format!("script-{host}"))
         .stack_size(64 << 20)
-        .spawn(move || host_main(host, name, code, Link { rx: to_rx, tx: from_tx }));
+        .spawn(move || {
+            effectcraft_engine::prefs::set_script_io_for_tests(io_hook); // test hook only; None in production
+            host_main(host, name, code, Link { rx: to_rx, tx: from_tx })
+        });
     if spawned.is_err() {
         return crate::runtime::run_inline(session, req);
     }

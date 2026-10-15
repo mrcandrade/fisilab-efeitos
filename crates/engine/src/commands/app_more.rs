@@ -244,14 +244,14 @@ fn has_footage(s: &Session) -> std::result::Result<(), String> {
 }
 
 /// `File.execute()` from scripts (and agents): open a file with its default application.
-/// Needs Allow Scripts to Write Files and Access Network; with Warn User When Executing Files on,
+/// Needs the administrator override `EFFECTCRAFT_ALLOW_SCRIPT_IO=1`; with Warn User When Executing Files on,
 /// the frontend asks first (`confirmed: true` skips the question).
 fn execute_file(s: &mut Session, p: &Value) -> Result<Value> {
     let path = str_p(p, "path").ok_or_else(|| bad("file.executeFile", "missing `path`"))?;
-    if !s.prefs.scripting.allow_scripts_write_files {
+    if !crate::prefs::script_io_allowed() {
         return Err(bad(
             "file.executeFile",
-            "scripts can't execute files unless Settings ▸ Scripting & Expressions ▸ Allow Scripts to Write Files and Access Network is on",
+            "scripts can't execute files unless an administrator sets EFFECTCRAFT_ALLOW_SCRIPT_IO=1",
         ));
     }
     if !std::path::Path::new(path).exists() {
@@ -710,7 +710,7 @@ mod tests {
         let f = dir.join("run #1 100%.txt");
         std::fs::write(&f, "x").unwrap();
         let mut s = crate::Session::default();
-        s.execute("prefs.set", json!({"key": "scripting.allowScriptsWriteFiles", "value": true})).unwrap();
+        crate::prefs::set_script_io_for_tests(Some(true));
         s.drain_events();
         s.execute("file.executeFile", json!({"path": f.to_string_lossy(), "confirmed": true})).unwrap();
         let expected = super::super::layer_menu::file_url(&f.to_string_lossy());

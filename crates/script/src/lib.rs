@@ -30,8 +30,8 @@
 //! * **Match names** ([`matchnames`]): After Effects' documented match names for our properties
 //!   and effects (`ADBE Transform Group`, `ADBE Position`, `ADBE Gaussian Blur 2`…).
 //! * **Security**: scripts can import/open/save projects and render, but `File` reads are limited
-//!   to the project's folder and writes (and the network) are off unless Preferences ▸ Scripting
-//!   & Expressions ▸ Allow Scripts to Write Files and Access Network is on.
+//!   to the project's folder and writes (and the network) are off unless an administrator sets the
+//!   environment variable `EFFECTCRAFT_ALLOW_SCRIPT_IO=1` (no preference or UI switch exists).
 //! * **ScriptUI** (`scriptui.js`, `ui.rs`): `Window` (dialog / palette / window), `Panel`,
 //!   `Group`, `Button`, `StaticText`, `EditText`, `Checkbox`, `RadioButton`, `Slider`,
 //!   `Progressbar`, `DropDownList`, `ListBox`, `TabbedPanel`/`Tab`, with `add()`, `orientation`,

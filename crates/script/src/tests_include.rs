@@ -83,11 +83,11 @@ fn hostile_includes_are_bounded_and_gated() {
     write(&dir.join("outside.jsx"), "var secret = 7;");
     write(&dir.join("app/main.jsx"), "#include \"../outside.jsx\"\nsecret");
     let e = run_file(&mut s, &dir.join("app/main.jsx")).error.expect("blocked");
-    assert!(e.message.contains("Allow Scripts to Write Files"), "{e:?}");
+    assert!(e.message.contains("EFFECTCRAFT_ALLOW_SCRIPT_IO"), "{e:?}");
     // Code run without a file can't include relative to anything but the project's folder.
     let e = run_code(&mut s, "#include \"outside.jsx\"", "console").error.expect("no folder");
     assert!(e.message.contains("outside.jsx"), "{e:?}");
-    s.prefs.scripting.allow_scripts_write_files = true;
+    effectcraft_engine::prefs::set_script_io_for_tests(Some(true));
     let o = run_file(&mut s, &dir.join("app/main.jsx"));
     assert_eq!(o.result, json!(7), "{:?}", o.error);
     let _ = std::fs::remove_dir_all(&dir);

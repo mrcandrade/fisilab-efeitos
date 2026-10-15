@@ -212,7 +212,7 @@ fn native_query(_: &JsValue, args: &[JsValue], ctx: &mut Context) -> JsResult<Js
             "version": format!("26.0 (Efeitos {})", env!("CARGO_PKG_VERSION")),
             "buildName": env!("CARGO_PKG_VERSION"),
             "scriptName": act.name,
-            "allowFiles": act.session.prefs.scripting.allow_scripts_write_files,
+            "allowFiles": effectcraft_engine::prefs::script_io_allowed(),
             "projectDir": project_dir(&act.session),
         })),
         _ => crate::model::query(&mut act.session, &kind, &a),
@@ -339,13 +339,13 @@ pub(crate) fn normalize(p: &str) -> std::path::PathBuf {
         .unwrap_or(out)
 }
 
-pub(crate) const GATE: &str = "Preferences ▸ Scripting & Expressions ▸ Allow Scripts to Write Files and Access Network";
+pub(crate) const GATE: &str = "the administrator override EFFECTCRAFT_ALLOW_SCRIPT_IO=1";
 
 /// The file-access gate: reads under the project's folder are always allowed; other reads, all
-/// writes and listing other folders need the Allow Scripts to Write Files preference.
+/// writes and listing other folders need the administrator override (EFFECTCRAFT_ALLOW_SCRIPT_IO=1).
 fn check_access(s: &Session, path: &str, write: bool) -> Result<std::path::PathBuf, String> {
     let p = normalize(path);
-    if s.prefs.scripting.allow_scripts_write_files {
+    if effectcraft_engine::prefs::script_io_allowed() {
         return Ok(p);
     }
     if write {
@@ -374,7 +374,7 @@ fn native_file(_: &JsValue, args: &[JsValue], ctx: &mut Context) -> JsResult<JsV
     let data = if args.len() > 2 { arg_string(args, 2, ctx)? } else { String::new() };
     let r: Result<J, String> = with_active(|a| {
         // File.execute(): opened with its default application through `file.executeFile`
-        // (Allow Scripts to Write Files gate, Warn User When Executing Files confirmation).
+        // (script I/O gate, Warn User When Executing Files confirmation).
         if op == "execute" {
             return exec(&mut a.session, "file.executeFile", json!({"path": path})).map(|v| json!(v.get("opened").is_some()));
         }
@@ -436,8 +436,9 @@ fn native_file(_: &JsValue, args: &[JsValue], ctx: &mut Context) -> JsResult<JsV
                 let r = if p.is_dir() { std::fs::remove_dir(&p) } else { std::fs::remove_file(&p) };
                 Ok(json!(r.is_ok()))
             }
-            "network" => Err(if s.prefs.scripting.allow_scripts_write_files {
-                "network access from scripts is not supported in Efeitos".to_string()
+            // Network access goes through `Socket` (socket.rs, same gate); this file op has none.
+            "network" => Err(if effectcraft_engine::prefs::script_io_allowed() {
+                "use the Socket object for network access (File has no network operation)".to_string()
             } else {
                 format!("scripts can't access the network unless {GATE} is on")
             }),

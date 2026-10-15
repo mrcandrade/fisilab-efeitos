@@ -20,7 +20,7 @@ Guide):
 | Keyboard shortcuts for scripts (the Keyboard Shortcuts editor lists the scripts of the Scripts folder) | Shortcuts bind to commands and menu entries; the File ▸ Scripts and Window menu entries of scripts aren't offered | Gap |
 | Running a script from the command line (`afterfx -r script.jsx`) | `effectcraft-cli script`, the control channel's and MCP's `script.run` | Same purpose, other entry points |
 | `app.settings` (kept in the preferences between sessions) | Kept in `script_settings.json` in the settings folder (`script.settings.get` / `script.settings.save`) | Same |
-| Allow Scripts to Write Files and Access Network | Settings ▸ Scripting & Expressions | Same |
+| Allow Scripts to Write Files and Access Network | Not a setting: administrator environment variable `EFFECTCRAFT_ALLOW_SCRIPT_IO=1` | Locked down |
 
 The settings folder is `~/Library/Application Support/FisiLab Efeitos` on macOS, `%APPDATA%\FisiLab Efeitos`
 on Windows and `$XDG_CONFIG_HOME/fisilab-efeitos` (or `~/.config/fisilab-efeitos`) on Linux

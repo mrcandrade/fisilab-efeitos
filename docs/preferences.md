@@ -153,7 +153,7 @@ Commands (CLI, MCP, control channel):
 - `threeD.extendedViewer`: 3D layers reaching beyond the comp frame are outlined on the
   pasteboard
 - `threeD.realtimeShadows`: draft (Fast Previews) renders keep 3D shadows
-- `scripting.allowScriptsWriteFiles`: the scripting file / network gate (and `File.execute()`)
+- `scripting.allowScriptsWriteFiles`: legacy, ignored; the scripting file / network gate (and `File.execute()`) is the `EFFECTCRAFT_ALLOW_SCRIPT_IO=1` environment override
 - `scripting.warnExecutingFiles`: `File.execute()` asks before opening a file
 - `scripting.editorFontSize`, `scripting.syntaxHighlighting`, `scripting.lineNumbers`,
   `scripting.autoComplete` (Tab accepts), `scripting.bracketMatching`, `scripting.wordWrap`:

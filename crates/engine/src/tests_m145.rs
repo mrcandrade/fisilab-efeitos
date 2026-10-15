@@ -337,7 +337,7 @@ fn execute_file_needs_the_gate_and_asks_first() {
     std::fs::write(&f, "x").unwrap();
     let p = json!({"path": f.to_string_lossy()});
     assert!(s.execute("file.executeFile", p.clone()).is_err(), "off by default");
-    s.execute("prefs.set", json!({"key": "scripting.allowScriptsWriteFiles", "value": true})).unwrap();
+    crate::prefs::set_script_io_for_tests(Some(true));
     s.drain_events();
     let r = s.execute("file.executeFile", p.clone()).unwrap();
     assert!(r.get("needsConfirmation").is_some());

@@ -37,9 +37,9 @@ pub(crate) fn resolve(s: &Session, name: &str, dir: Option<&Path>, search: &[Pat
 }
 
 /// The read gate for loaded script files: files under the running script's own folder (`root`) or
-/// the project's folder; anywhere with the Allow Scripts to Write Files preference.
+/// the project's folder; anywhere with the administrator override (EFFECTCRAFT_ALLOW_SCRIPT_IO=1).
 pub(crate) fn check_read(s: &Session, path: &Path, root: Option<&Path>) -> Result<(), String> {
-    if s.prefs.scripting.allow_scripts_write_files {
+    if effectcraft_engine::prefs::script_io_allowed() {
         return Ok(());
     }
     let project = project_dir(s).map(|d| normalize(&d));

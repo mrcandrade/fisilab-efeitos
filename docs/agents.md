@@ -679,8 +679,8 @@ effectcraft-cli script tweak.jsx --bridge 9877              # against the live a
 
 `writeLn`/`$.writeln`/`alert` output is printed, then the value of the last expression. A script
 error exits with status 1 and `file:line:col: message`. Scripts may read files only in the
-project's folder and may not write files or use the network unless the user turns on Preferences ▸
-Scripting & Expressions ▸ Allow Scripts to Write Files and Access Network.
+project's folder and may not write files or use the network unless an administrator sets
+`EFFECTCRAFT_ALLOW_SCRIPT_IO=1` in the environment (there is no setting for it).
 
 `file.exportLottie` returns `{path, bytes, warnings}`: the warnings list every feature Lottie
 cannot express (most effects, cameras and lights, layer styles, audio, video footage…), so an

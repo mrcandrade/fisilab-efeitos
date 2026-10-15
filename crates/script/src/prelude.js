@@ -322,7 +322,7 @@ Object.defineProperty(Folder, "temp", { get: function () { return null; } });
 Object.defineProperty(Folder, "desktop", { get: function () { return null; } });
 Object.defineProperty(Folder, "myDocuments", { get: function () { return null; } });
 
-// TCP sockets (behind Allow Scripts to Write Files and Access Network; see socket.rs).
+// TCP sockets (behind the EFFECTCRAFT_ALLOW_SCRIPT_IO=1 administrator override; see socket.rs).
 function Socket() {
   if (!(this instanceof Socket)) return new Socket();
   __sock("check", 0, "{}");

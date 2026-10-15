@@ -108,3 +108,8 @@ Base: EffectCraft 0.10.0 (commit `05955c0`, "Release 0.10.0").
 - O ícone original do EffectCraft (`assets/app-icon/`, MIT OR Apache-2.0) continua no repositório
   (usado em testes e no app web), mas o app desktop usa o ícone do Efeitos.
 - O app web (`apps/effectcraft-web`) só teve o nome visível trocado.
+
+## Segurança e privacidade
+
+- **Scripts sem acesso a arquivos/rede por padrão, sem opção na interface.** A preferência "Allow Scripts to Write Files and Access Network" foi removida das Configurações e o valor salvo nas preferências agora é ignorado: scripts `.jsx` só leem a pasta do projeto, não gravam arquivos nem abrem sockets TCP (`File`, `#include`, `Socket`, `File.execute`). Somente um administrador pode liberar, definindo a variável de ambiente `EFFECTCRAFT_ALLOW_SCRIPT_IO=1` (função `script_io_allowed` em `crates/engine/src/prefs.rs`). Em PCs compartilhados de laboratório, um aluno não consegue mais ligar isso pela interface. A confirmação de `File.execute` foi mantida.
+- **Documentação corrigida:** o texto em `runtime.rs` dizia que a rede em scripts não era suportada, embora `socket.rs` a implemente; agora indica o objeto `Socket` e o mesmo controle de acesso.

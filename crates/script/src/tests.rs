@@ -390,7 +390,7 @@ fn security_gate_for_files() {
     for path in [dir.join("secret.txt"), proj.join("../secret.txt")] {
         let o = run_code(&mut s, &format!("var f = new File({}); f.open('r');", q(&path)), "gate.jsx");
         let e = o.error.expect("blocked");
-        assert!(e.message.contains("Allow Scripts to Write Files"), "{e:?}");
+        assert!(e.message.contains("EFFECTCRAFT_ALLOW_SCRIPT_IO"), "{e:?}");
     }
     // Writing is refused anywhere, the network too.
     let o = run_code(&mut s, &format!("var f = new File({}); f.open('w'); f.write('x'); f.close();", q(&proj.join("out.txt"))), "gate.jsx");
@@ -399,7 +399,7 @@ fn security_gate_for_files() {
     assert!(run_code(&mut s, "new Socket()", "net.jsx").error.is_some());
     assert!(run_code(&mut s, "system.callSystem('ls')", "sys.jsx").error.is_some());
     // With the preference on, scripts can write and read anywhere.
-    s.prefs.scripting.allow_scripts_write_files = true;
+    effectcraft_engine::prefs::set_script_io_for_tests(Some(true));
     ok(&mut s, &format!("var f = new File({}); f.open('w'); f.writeln('written'); f.close();", q(&dir.join("w.txt"))));
     assert_eq!(std::fs::read_to_string(dir.join("w.txt")).unwrap(), "written\n");
     let o = ok(&mut s, &format!("var f = new File({}); f.open('r'); f.readln()", q(&dir.join("secret.txt"))));
@@ -419,9 +419,9 @@ fn save_frame_to_png_writes_behind_the_file_gate() {
         serde_json::to_string(&png.to_string_lossy()).unwrap()
     );
     let o = run_code(&mut s, &code, "frame.jsx");
-    assert!(o.error.expect("refused").message.contains("Allow Scripts to Write Files"));
+    assert!(o.error.expect("refused").message.contains("EFFECTCRAFT_ALLOW_SCRIPT_IO"));
     assert!(!png.exists() || std::fs::metadata(&png).unwrap().len() == 0);
-    s.prefs.scripting.allow_scripts_write_files = true;
+    effectcraft_engine::prefs::set_script_io_for_tests(Some(true));
     ok(&mut s, &code);
     let bytes = std::fs::read(&png).unwrap();
     assert_eq!(&bytes[..8], b"\x89PNG\r\n\x1a\n");
@@ -452,22 +452,28 @@ fn scripts_cant_change_what_scripts_may_do() {
     // Other settings, and the expression editor's, are still the script's to change.
     ok(&mut s, "app.run('prefs.set', {values: {'general.undoLevels': 40, 'scripting.editorFontSize': 16}})");
     assert_eq!((s.prefs.general.undo_levels, s.prefs.scripting.editor_font_size), (40, 16));
-    // The user grants access; a script's Reset Settings doesn't take it back or change it.
-    s.execute("prefs.set", json!({"key": "scripting.allowScriptsWriteFiles", "value": true})).unwrap();
+    // A script's Reset Settings leaves the permissions alone.
     ok(&mut s, "app.run('prefs.reset', {})");
-    assert!(s.prefs.scripting.allow_scripts_write_files);
     assert_eq!(s.prefs.general.undo_levels, effectcraft_engine::prefs::Prefs::default().general.undo_levels);
     // A command script file is a script too.
     let dir = std::env::temp_dir().join(format!("ec-script-grant-{}", std::process::id()));
     std::fs::create_dir_all(&dir).unwrap();
     let f = dir.join("grant.json");
-    std::fs::write(&f, r#"[{"command": "prefs.set", "params": {"key": "scripting.allowScriptsWriteFiles", "value": false}}]"#).unwrap();
+    std::fs::write(&f, r#"[{"command": "prefs.set", "params": {"key": "scripting.allowScriptsWriteFiles", "value": true}}]"#).unwrap();
     let e = s.execute("file.runScript", json!({"path": f.to_string_lossy()})).unwrap_err().to_string();
     assert!(e.contains("Scripts can't change"), "{e}");
-    assert!(s.prefs.scripting.allow_scripts_write_files);
-    // The user (UI, CLI, control channel) can take it back.
-    s.execute("prefs.set", json!({"key": "scripting.allowScriptsWriteFiles", "value": false})).unwrap();
     assert!(!s.prefs.scripting.allow_scripts_write_files);
+    // Not even the user can: the setting is not in the schema, and a legacy saved `true` is ignored.
+    let _ = s.execute("prefs.set", json!({"key": "scripting.allowScriptsWriteFiles", "value": true}));
+    s.prefs.scripting.allow_scripts_write_files = true;
+    effectcraft_engine::prefs::set_script_io_for_tests(None);
+    if std::env::var(effectcraft_engine::prefs::ALLOW_SCRIPT_IO_ENV).is_err() {
+        assert!(!effectcraft_engine::prefs::script_io_allowed());
+        assert!(run_code(&mut s, "new Socket()", "net2.jsx").error.is_some());
+        assert!(run_code(&mut s, "new File('/ec-nope/x.txt').open('w')", "w.jsx").error.is_some());
+        assert!(s.execute("file.executeFile", json!({"path": f.to_string_lossy(), "confirmed": true})).is_err());
+    }
+    assert!(!effectcraft_engine::prefs::pages_json().to_string().contains("allowScriptsWriteFiles"));
     let _ = std::fs::remove_dir_all(&dir);
 }
 
@@ -913,7 +919,7 @@ fn binary_file_io_preserves_all_byte_values() {
     std::fs::write(&src, original).unwrap();
     let mut s = session();
     s.path = Some(dir.join("project.ecproj").to_string_lossy().to_string());
-    s.prefs.scripting.allow_scripts_write_files = true;
+    effectcraft_engine::prefs::set_script_io_for_tests(Some(true));
     let q = |p: &std::path::Path| serde_json::to_string(&p.to_string_lossy()).unwrap();
 
     let read = ok(
