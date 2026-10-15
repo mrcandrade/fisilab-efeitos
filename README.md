@@ -47,10 +47,7 @@ efeitos e renderiza o resultado.
 
 ### Windows
 
-Baixe o instalador `FisiLab-Efeitos-Setup-<versão>.exe` no portal de downloads da
-[Suíte FisiLab](https://github.com/mrcandrade/larfic/tree/main/suite-fisilab) ou na página de
-[Releases](https://github.com/mrcandrade/fisilab-efeitos/releases) do repositório
-`mrcandrade/fisilab-efeitos` e execute-o.
+Baixe o instalador `FisiLab-Efeitos-Setup-<versão>.exe` na [página de downloads da Suíte FisiLab](https://github.com/mrcandrade/larfic/releases/latest) e execute-o.
 
 ### Compilar a partir do código
 
@@ -90,10 +87,15 @@ Conhecimento produzido numa universidade pública deve circular livremente, e as
 usamos para ensinar, pesquisar e criar também: leia o
 [Manifesto pelas tecnologias livres](https://github.com/mrcandrade/larfic/blob/main/suite-fisilab/MANIFESTO.md).
 
+## Privacidade
+
+O Efeitos não coleta dados de uso nem envia o conteúdo dos seus arquivos para lugar nenhum: não há
+telemetria, estatísticas nem verificação automática de atualizações. Veja o que ele guarda no seu
+computador e quando usa a internet no [aviso de privacidade da Suíte FisiLab](https://github.com/mrcandrade/larfic/blob/main/suite-fisilab/PRIVACIDADE.md).
+
 ---
 
 <p align="center">
-  <a href="https://www.ufrgs.br"><img src="assets/fisilab/ufrgs-logo.gif" alt="UFRGS" height="48"></a>
   &nbsp;&nbsp;
   <a href="https://cta.if.ufrgs.br"><img src="assets/fisilab/cta-logo.webp" alt="CTA — Centro de Tecnologia Acadêmica" height="48"></a>
   &nbsp;&nbsp;
