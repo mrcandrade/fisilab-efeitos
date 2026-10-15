@@ -1252,7 +1252,7 @@ Help
   Projeto original (EffectCraft) | help.github
   Open Demo Project | file.openDemoProject
   ---
-  Sobre a Suíte FisiLab… | help.fisilab
+  Sobre a Suíte FisiLab... | help.fisilab
   [!mac] About Efeitos... | app.about
 "#;
 

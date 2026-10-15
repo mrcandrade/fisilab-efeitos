@@ -905,7 +905,7 @@ const SIMPLIFIED_CHINESE: &[(&str, &str, &str)] = &[
     ("help.manifesto", "Manifesto pelas tecnologias livres", "Manifesto pelas tecnologias livres"),
     ("help.appPage", "Efeitos Home Page", "Efeitos 主页"),
     ("help.github", "Projeto original (EffectCraft)", "Projeto original (EffectCraft)"),
-    ("help.fisilab", "Sobre a Suíte FisiLab…", "Sobre a Suíte FisiLab…"),
+    ("help.fisilab", "Sobre a Suíte FisiLab...", "Sobre a Suíte FisiLab..."),
     ("file.openDemoProject", "Open Demo Project", "打开示例项目"),
 ];
 
@@ -1540,7 +1540,7 @@ const TRADITIONAL_CHINESE: &[(&str, &str, &str)] = &[
     ("help.manifesto", "Manifesto pelas tecnologias livres", "Manifesto pelas tecnologias livres"),
     ("help.appPage", "Efeitos Home Page", "Efeitos 首頁"),
     ("help.github", "Projeto original (EffectCraft)", "Projeto original (EffectCraft)"),
-    ("help.fisilab", "Sobre a Suíte FisiLab…", "Sobre a Suíte FisiLab…"),
+    ("help.fisilab", "Sobre a Suíte FisiLab...", "Sobre a Suíte FisiLab..."),
     ("file.openDemoProject", "Open Demo Project", "開啟範例專案"),
 ];
 
@@ -2172,7 +2172,7 @@ const JAPANESE: &[(&str, &str, &str)] = &[
     ("help.manifesto", "Manifesto pelas tecnologias livres", "Manifesto pelas tecnologias livres"),
     ("help.appPage", "Efeitos Home Page", "Efeitosホームページ"),
     ("help.github", "Projeto original (EffectCraft)", "Projeto original (EffectCraft)"),
-    ("help.fisilab", "Sobre a Suíte FisiLab…", "Sobre a Suíte FisiLab…"),
+    ("help.fisilab", "Sobre a Suíte FisiLab...", "Sobre a Suíte FisiLab..."),
     ("file.openDemoProject", "Open Demo Project", "デモプロジェクトを開く"),
 ];
 
@@ -2807,7 +2807,7 @@ const UKRAINIAN: &[(&str, &str, &str)] = &[
     ("help.manifesto", "Manifesto pelas tecnologias livres", "Manifesto pelas tecnologias livres"),
     ("help.appPage", "Efeitos Home Page", "Домашня сторінка Efeitos"),
     ("help.github", "Projeto original (EffectCraft)", "Projeto original (EffectCraft)"),
-    ("help.fisilab", "Sobre a Suíte FisiLab…", "Sobre a Suíte FisiLab…"),
+    ("help.fisilab", "Sobre a Suíte FisiLab...", "Sobre a Suíte FisiLab..."),
     ("file.openDemoProject", "Open Demo Project", "Відкрити демонстраційний проєкт"),
 ];
 
@@ -3443,7 +3443,7 @@ const SPANISH: &[(&str, &str, &str)] = &[
     ("help.manifesto", "Manifesto pelas tecnologias livres", "Manifesto pelas tecnologias livres"),
     ("help.appPage", "Efeitos Home Page", "Página de inicio de Efeitos"),
     ("help.github", "Projeto original (EffectCraft)", "Projeto original (EffectCraft)"),
-    ("help.fisilab", "Sobre a Suíte FisiLab…", "Sobre a Suíte FisiLab…"),
+    ("help.fisilab", "Sobre a Suíte FisiLab...", "Sobre a Suíte FisiLab..."),
     ("file.openDemoProject", "Open Demo Project", "Abrir proyecto de demostración"),
 ];
 
@@ -4077,7 +4077,7 @@ const PORTUGUESE: &[(&str, &str, &str)] = &[
     ("help.manifesto", "Manifesto pelas tecnologias livres", "Manifesto pelas tecnologias livres"),
     ("help.appPage", "Efeitos Home Page", "Página inicial do Efeitos"),
     ("help.github", "Projeto original (EffectCraft)", "Projeto original (EffectCraft)"),
-    ("help.fisilab", "Sobre a Suíte FisiLab…", "Sobre a Suíte FisiLab…"),
+    ("help.fisilab", "Sobre a Suíte FisiLab...", "Sobre a Suíte FisiLab..."),
     ("file.openDemoProject", "Open Demo Project", "Abrir projeto de demonstração"),
 ];
 
@@ -4713,7 +4713,7 @@ const RUSSIAN: &[(&str, &str, &str)] = &[
     ("help.manifesto", "Manifesto pelas tecnologias livres", "Manifesto pelas tecnologias livres"),
     ("help.appPage", "Efeitos Home Page", "Главная страница Efeitos"),
     ("help.github", "Projeto original (EffectCraft)", "Projeto original (EffectCraft)"),
-    ("help.fisilab", "Sobre a Suíte FisiLab…", "Sobre a Suíte FisiLab…"),
+    ("help.fisilab", "Sobre a Suíte FisiLab...", "Sobre a Suíte FisiLab..."),
     ("file.openDemoProject", "Open Demo Project", "Открыть демонстрационный проект"),
 ];
 
@@ -5347,7 +5347,7 @@ const FRENCH: &[(&str, &str, &str)] = &[
     ("help.manifesto", "Manifesto pelas tecnologias livres", "Manifesto pelas tecnologias livres"),
     ("help.appPage", "Efeitos Home Page", "Page d’accueil Efeitos"),
     ("help.github", "Projeto original (EffectCraft)", "Projeto original (EffectCraft)"),
-    ("help.fisilab", "Sobre a Suíte FisiLab…", "Sobre a Suíte FisiLab…"),
+    ("help.fisilab", "Sobre a Suíte FisiLab...", "Sobre a Suíte FisiLab..."),
     ("file.openDemoProject", "Open Demo Project", "Ouvrir le projet de démonstration"),
 ];
 
@@ -5981,7 +5981,7 @@ const GERMAN: &[(&str, &str, &str)] = &[
     ("help.manifesto", "Manifesto pelas tecnologias livres", "Manifesto pelas tecnologias livres"),
     ("help.appPage", "Efeitos Home Page", "Efeitos-Startseite"),
     ("help.github", "Projeto original (EffectCraft)", "Projeto original (EffectCraft)"),
-    ("help.fisilab", "Sobre a Suíte FisiLab…", "Sobre a Suíte FisiLab…"),
+    ("help.fisilab", "Sobre a Suíte FisiLab...", "Sobre a Suíte FisiLab..."),
     ("file.openDemoProject", "Open Demo Project", "Demoprojekt öffnen"),
 ];
 
@@ -6616,7 +6616,7 @@ const CZECH: &[(&str, &str, &str)] = &[
     ("help.manifesto", "Manifesto pelas tecnologias livres", "Manifesto pelas tecnologias livres"),
     ("help.appPage", "Efeitos Home Page", "Domovská stránka Efeitos"),
     ("help.github", "Projeto original (EffectCraft)", "Projeto original (EffectCraft)"),
-    ("help.fisilab", "Sobre a Suíte FisiLab…", "Sobre a Suíte FisiLab…"),
+    ("help.fisilab", "Sobre a Suíte FisiLab...", "Sobre a Suíte FisiLab..."),
     ("file.openDemoProject", "Open Demo Project", "Otevřít ukázkový projekt"),
 ];
 

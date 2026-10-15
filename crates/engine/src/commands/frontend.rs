@@ -19,7 +19,7 @@ pub fn specs() -> Vec<CommandSpec> {
         // Application.
         fe!("app.about", "About Efeitos...", [], None, "{}", always),
         // Suíte FisiLab: the suite's About window (credits, manifesto, UFRGS and CTA).
-        fe!("help.fisilab", "Sobre a Suíte FisiLab…", [], None, "{}", always),
+        fe!("help.fisilab", "Sobre a Suíte FisiLab...", [], None, "{}", always),
         fe!("layer.style.options", "Layer Style Options...", ["Layer", "Layer Styles"], None, "{layer?, style?: blendingOptions|dropShadow|…}", has_layers),
         fe!(
             "app.settings",

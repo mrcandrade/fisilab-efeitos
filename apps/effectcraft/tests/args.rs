@@ -69,5 +69,8 @@ fn a_bad_control_port_stops_the_launch() {
 fn version_still_prints_with_a_bad_port_variable() {
     let out = Command::new(env!("CARGO_BIN_EXE_fisilab-efeitos")).arg("--version").env("EFFECTCRAFT_CONTROL_PORT", "abc").output().unwrap();
     assert!(out.status.success(), "{}", String::from_utf8_lossy(&out.stderr));
-    assert_eq!(String::from_utf8(out.stdout).unwrap(), format!("effectcraft {}\n", env!("CARGO_PKG_VERSION")));
+    assert_eq!(
+        String::from_utf8(out.stdout).unwrap(),
+        format!("fisilab-efeitos {} (Suíte FisiLab, baseado no EffectCraft)\n", env!("CARGO_PKG_VERSION"))
+    );
 }

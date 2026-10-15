@@ -2100,9 +2100,9 @@ mod fisilab_tests {
     #[test]
     fn help_menu_opens_the_suite_about_window() {
         let entries = effectcraft_engine::menus::entries();
-        let (path, entry) = entries.iter().find(|(_, e)| e.command == "help.fisilab").expect("Help ▸ Sobre a Suíte FisiLab…");
+        let (path, entry) = entries.iter().find(|(_, e)| e.command == "help.fisilab").expect("Help ▸ Sobre a Suíte FisiLab...");
         assert_eq!(path.first().map(String::as_str), Some("Help"));
-        assert_eq!(entry.label, fisilab_brand::ABOUT_MENU_LABEL);
+        assert_eq!(entry.label, "Sobre a Suíte FisiLab...");
         let ctx = egui::Context::default();
         let mut app = super::EffectcraftApp::new(effectcraft_engine::Session::default());
         assert!(!fisilab_brand::about::is_open(&ctx));
