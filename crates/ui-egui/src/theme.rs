@@ -1,8 +1,6 @@
 //! Design tokens. Every widget reads colours/sizes from [`Tokens`] so themes apply everywhere.
 //!
-//! The default theme is "UFRGS Noite", the Suíte FisiLab dark theme built from
-//! `fisilab_brand::palette::NOITE` ("UFRGS Dia" is its light counterpart). The upstream themes
-//! (Dark, Darker, Light) follow the look of After Effects' UI (values estimated from public
+//! The default theme follows the look of After Effects' dark UI (values estimated from public
 //! documentation and product knowledge, tuned by eye; see `plan/aftereffects/README.md` §2). Fonts
 //! are Inter + JetBrains Mono (OFL).
 
@@ -13,25 +11,16 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ThemeKind {
-    /// "UFRGS Noite": the Suíte FisiLab dark theme (`fisilab_brand::palette::NOITE`), the default.
     #[default]
-    UfrgsNoite,
-    /// "UFRGS Dia": the Suíte FisiLab light theme (`fisilab_brand::palette::DIA`).
-    UfrgsDia,
     Dark,
     Darker,
     Light,
 }
 
 impl ThemeKind {
-    /// Every theme, the Suíte FisiLab ones first.
-    pub const ALL: [ThemeKind; 5] = [ThemeKind::UfrgsNoite, ThemeKind::UfrgsDia, ThemeKind::Dark, ThemeKind::Darker, ThemeKind::Light];
-
     pub fn from_name(s: &str) -> Option<ThemeKind> {
         match s.to_ascii_lowercase().as_str() {
-            "ufrgsnoite" | "ufrgs-noite" | "ufrgs noite" | "default" => Some(ThemeKind::UfrgsNoite),
-            "ufrgsdia" | "ufrgs-dia" | "ufrgs dia" => Some(ThemeKind::UfrgsDia),
-            "dark" => Some(ThemeKind::Dark),
+            "dark" | "default" => Some(ThemeKind::Dark),
             "darker" | "darkest" => Some(ThemeKind::Darker),
             "light" => Some(ThemeKind::Light),
             _ => None,
@@ -41,8 +30,6 @@ impl ThemeKind {
     /// The settings value (`appearance.theme`, `appearance.darkTheme`, `appearance.lightTheme`).
     pub fn name(self) -> &'static str {
         match self {
-            ThemeKind::UfrgsNoite => "ufrgsNoite",
-            ThemeKind::UfrgsDia => "ufrgsDia",
             ThemeKind::Dark => "dark",
             ThemeKind::Darker => "darker",
             ThemeKind::Light => "light",
@@ -50,16 +37,7 @@ impl ThemeKind {
     }
 
     pub fn is_light(self) -> bool {
-        matches!(self, ThemeKind::Light | ThemeKind::UfrgsDia)
-    }
-
-    /// The Suíte FisiLab colour roles of the "UFRGS" themes (`None` for the upstream themes).
-    pub fn brand_tones(self) -> Option<&'static fisilab_brand::palette::Tons> {
-        match self {
-            ThemeKind::UfrgsNoite => Some(&fisilab_brand::palette::NOITE),
-            ThemeKind::UfrgsDia => Some(&fisilab_brand::palette::DIA),
-            _ => None,
-        }
+        self == ThemeKind::Light
     }
 }
 
@@ -206,7 +184,6 @@ impl Tokens {
             gradients: true,
         };
         match kind {
-            ThemeKind::UfrgsNoite | ThemeKind::UfrgsDia => Tokens::from_brand(kind, kind.brand_tones().unwrap_or(&fisilab_brand::palette::NOITE), dark),
             ThemeKind::Dark => dark,
             ThemeKind::Darker => Tokens {
                 app_bg: Color32::from_rgb(0x08, 0x08, 0x08),
@@ -259,68 +236,6 @@ impl Tokens {
                 expr_text: Color32::from_rgb(0xa3, 0x34, 0x17),
                 ..dark
             },
-        }
-    }
-
-    /// The "UFRGS Noite" / "UFRGS Dia" tokens: every chrome colour comes from the Suíte FisiLab
-    /// colour roles (`fisilab_brand::palette::Tons`); the layout (radii, sizes, gradients) and the
-    /// colours that encode data (label colours) stay those of the upstream default theme `base`.
-    fn from_brand(kind: ThemeKind, b: &fisilab_brand::palette::Tons, base: Tokens) -> Tokens {
-        let mix = |a: Color32, c: Color32, t: f32| a.lerp_to_gamma(c, t);
-        // A translucent (premultiplied) colour composited over an opaque one.
-        let over = |under: Color32, top: Color32| {
-            let k = 1.0 - top.a() as f32 / 255.0;
-            let ch = |u: u8, t: u8| (t as f32 + u as f32 * k).round().clamp(0.0, 255.0) as u8;
-            Color32::from_rgb(ch(under.r(), top.r()), ch(under.g(), top.g()), ch(under.b(), top.b()))
-        };
-        let light = !b.escuro;
-        Tokens {
-            kind,
-            app_bg: b.fundo,
-            header_bg: mix(b.fundo, b.painel, if light { 0.5 } else { 0.6 }),
-            panel_bg: b.painel,
-            tab_text: b.texto_fraco,
-            tab_text_active: b.texto,
-            focus: b.foco,
-            accent: b.destaque,
-            accent_hover: b.destaque_hover,
-            text: b.texto,
-            text_dim: b.texto_fraco,
-            text_faint: b.texto_fraco,
-            icon: mix(b.texto_fraco, b.texto, 0.5),
-            icon_active: b.texto,
-            hover: b.hover,
-            pressed: b.ativo,
-            field_bg: b.elevado,
-            field_border: b.borda,
-            separator: b.borda,
-            row: b.painel,
-            row_alt: mix(b.painel, if light { b.fundo } else { b.elevado }, 0.35),
-            row_selected: over(b.painel, b.selecao),
-            hot_text: b.foco,
-            tl_bg: mix(b.fundo, b.painel, 0.5),
-            tl_ruler_bg: b.painel,
-            tl_ruler_tick: mix(b.borda, b.texto_fraco, 0.5),
-            tl_ruler_text: b.texto_fraco,
-            cti: b.destaque,
-            work_area: mix(b.painel, b.texto_fraco, 0.25),
-            cache_green: b.sucesso,
-            cache_blue: fisilab_brand::palette::AZUL_CTA,
-            keyframe: if light { b.texto_fraco } else { mix(b.texto_fraco, b.texto, 0.3) },
-            keyframe_selected: b.destaque,
-            pasteboard: if light { mix(b.fundo, b.borda, 0.4) } else { mix(b.fundo, b.painel, 0.4) },
-            timecode: b.foco,
-            danger: b.erro,
-            warning: b.aviso,
-            fx_header: b.elevado,
-            fx_header_active: over(b.elevado, b.selecao),
-            tl_graph_selected: b.hover,
-            switch_well: if light { b.elevado } else { b.fundo },
-            tl_nav_bar: mix(b.borda, b.texto_fraco, 0.35),
-            tl_work_area_bar: mix(b.borda, b.texto_fraco, 0.45),
-            expr_bg: if light { b.elevado } else { b.fundo },
-            expr_text: if light { b.destaque } else { b.destaque_hover },
-            ..base
         }
     }
 
@@ -568,24 +483,8 @@ pub fn apply_visuals(ctx: &egui::Context, t: &Tokens) {
     v.window_stroke = Stroke::new(1.0, t.field_border);
     v.window_corner_radius = egui::CornerRadius::same(8);
     v.menu_corner_radius = egui::CornerRadius::same(6);
-    // The "UFRGS" themes take the text on the accent, the links and the shadows from the Suíte
-    // FisiLab palette (a deep navy shadow instead of black).
-    let shadow = |alpha: u8| match t.kind.brand_tones() {
-        Some(_) => {
-            let m = fisilab_brand::palette::MARINHO;
-            Color32::from_rgba_unmultiplied(m.r() / 2, m.g() / 2, m.b() / 2, if light { alpha / 2 } else { alpha })
-        }
-        None => Color32::from_black_alpha(alpha),
-    };
-    if let Some(b) = t.kind.brand_tones() {
-        v.selection.stroke = Stroke::new(1.0, b.texto_destaque);
-        v.hyperlink_color = b.foco;
-        v.warn_fg_color = b.aviso;
-        v.error_fg_color = b.erro;
-        v.code_bg_color = b.elevado;
-    }
-    v.popup_shadow = egui::epaint::Shadow { offset: [0, 6], blur: 20, spread: 0, color: shadow(150) };
-    v.window_shadow = egui::epaint::Shadow { offset: [0, 10], blur: 36, spread: 0, color: shadow(170) };
+    v.popup_shadow = egui::epaint::Shadow { offset: [0, 6], blur: 20, spread: 0, color: Color32::from_black_alpha(150) };
+    v.window_shadow = egui::epaint::Shadow { offset: [0, 10], blur: 36, spread: 0, color: Color32::from_black_alpha(170) };
     for w in [&mut v.widgets.noninteractive, &mut v.widgets.inactive, &mut v.widgets.hovered, &mut v.widgets.active, &mut v.widgets.open] {
         w.corner_radius = egui::CornerRadius::same(t.radius_sm as u8);
     }
@@ -795,72 +694,6 @@ mod tests {
         // And an English interface leaves the operating system's locale in charge.
         let mut english = FontDefinitions::default();
         install_script_fallbacks(&mut english, "en");
-    }
-
-    /// The Suíte FisiLab themes come first, "UFRGS Noite" is the default, and their names round-trip.
-    #[test]
-    fn ufrgs_themes_are_first_and_noite_is_the_default() {
-        use fisilab_brand::palette::{DIA, NOITE};
-        assert_eq!(ThemeKind::default(), ThemeKind::UfrgsNoite);
-        assert_eq!(&ThemeKind::ALL[..2], &[ThemeKind::UfrgsNoite, ThemeKind::UfrgsDia]);
-        for k in ThemeKind::ALL {
-            assert_eq!(ThemeKind::from_name(k.name()), Some(k), "{k:?}");
-            assert_eq!(Tokens::for_kind(k).kind, k);
-        }
-        assert_eq!(ThemeKind::from_name("default"), Some(ThemeKind::UfrgsNoite));
-        assert!(!ThemeKind::UfrgsNoite.is_light());
-        assert!(ThemeKind::UfrgsDia.is_light());
-        // The brand colours, not the upstream greys.
-        let noite = Tokens::for_kind(ThemeKind::UfrgsNoite);
-        assert_eq!((noite.app_bg, noite.panel_bg, noite.accent, noite.text), (NOITE.fundo, NOITE.painel, NOITE.destaque, NOITE.texto));
-        let dia = Tokens::for_kind(ThemeKind::UfrgsDia);
-        assert_eq!((dia.app_bg, dia.panel_bg, dia.accent, dia.text), (DIA.fundo, DIA.painel, DIA.destaque, DIA.texto));
-        // The layout of the upstream default theme is kept.
-        let dark = Tokens::for_kind(ThemeKind::Dark);
-        for t in [noite, dia] {
-            assert_eq!(
-                (t.radius, t.radius_sm, t.gap, t.tab_h, t.row_h, t.gradients),
-                (dark.radius, dark.radius_sm, dark.gap, dark.tab_h, dark.row_h, dark.gradients)
-            );
-            assert_eq!(t.labels, dark.labels);
-        }
-    }
-
-    /// Text stays readable on every surface of the Suíte FisiLab themes (WCAG contrast ratio).
-    #[test]
-    fn ufrgs_themes_keep_text_readable() {
-        fn lum(c: Color32) -> f32 {
-            let f = |x: u8| {
-                let s = x as f32 / 255.0;
-                if s <= 0.03928 { s / 12.92 } else { ((s + 0.055) / 1.055).powf(2.4) }
-            };
-            0.2126 * f(c.r()) + 0.7152 * f(c.g()) + 0.0722 * f(c.b())
-        }
-        fn contrast(a: Color32, b: Color32) -> f32 {
-            let (x, y) = (lum(a), lum(b));
-            (x.max(y) + 0.05) / (x.min(y) + 0.05)
-        }
-        for k in [ThemeKind::UfrgsNoite, ThemeKind::UfrgsDia] {
-            let t = Tokens::for_kind(k);
-            let surfaces = [
-                ("panel", t.panel_bg),
-                ("header", t.header_bg),
-                ("field", t.field_bg),
-                ("row", t.row),
-                ("rowAlt", t.row_alt),
-                ("rowSelected", t.row_selected),
-                ("fxHeader", t.fx_header),
-                ("fxHeaderActive", t.fx_header_active),
-                ("hover", t.hover),
-            ];
-            for (name, bg) in surfaces {
-                assert!(contrast(t.text, bg) >= 4.5, "{k:?}: text on {name}");
-                assert!(contrast(t.text_dim, bg) >= 3.0, "{k:?}: dim text on {name}");
-            }
-            assert!(contrast(t.hot_text, t.panel_bg) >= 3.0, "{k:?}: hot text");
-            assert!(contrast(t.expr_text, t.expr_bg) >= 3.0, "{k:?}: expression text");
-            assert!(contrast(t.keyframe, t.tl_bg) >= 3.0, "{k:?}: keyframes on the time graph");
-        }
     }
 
     #[test]

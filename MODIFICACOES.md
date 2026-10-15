@@ -60,11 +60,10 @@ Base: EffectCraft 0.10.0 (commit `05955c0`, "Release 0.10.0").
   `help.fisilab`), botão "Suíte FisiLab" na barra de ferramentas (no lugar do botão do Discord) e
   links na tela inicial e na janela "Sobre o Efeitos". A janela "Sobre o Efeitos" original,
   com os créditos aos contribuidores do EffectCraft, foi mantida.
-- **Temas "UFRGS Noite" (escuro, padrão) e "UFRGS Dia" (claro)**, os primeiros da lista, feitos com
-  os tons `NOITE`/`DIA` da paleta da suíte (`crates/ui-egui/src/theme.rs`, ids `ufrgsNoite` e
-  `ufrgsDia`; comandos `view.theme.ufrgsNoite`/`view.theme.ufrgsDia`). A disposição (cantos,
-  tamanhos, gradientes) é a mesma do tema padrão do EffectCraft; só as cores mudam. Os temas
-  originais (Dark, Darker, Light) continuam disponíveis em Configurações ▸ Aparência.
+- **Paleta original do EffectCraft**, com os temas **"Noite"** (escuro, o antigo "Dark", padrão) e
+  **"Dia"** (claro, o antigo "Light") em primeiro lugar na lista (ids `dark` e `light`, as cores
+  são exatamente as do EffectCraft; comandos `view.theme.dark`/`view.theme.light`). O tema
+  "Darker" continua disponível em Configurações ▸ Aparência.
 
 ### Links e comunicação com servidores
 
@@ -79,8 +78,9 @@ Base: EffectCraft 0.10.0 (commit `05955c0`, "Release 0.10.0").
 
 ### Idioma
 
-- O idioma padrão de uma instalação nova é **Português (Brasil)** (`general.language = "pt-br"`); a
-  escolha do usuário (inclusive "Igual ao sistema") continua funcionando.
+- Na **primeira execução** (sem configurações salvas) o programa abre em **Português (Brasil)**
+  (definido em `apps/effectcraft/src/main.rs`; o padrão da biblioteca continua `system`, como no
+  EffectCraft); a escolha do usuário (inclusive "Igual ao sistema") continua funcionando.
 
 ### Repositório e documentação
 
@@ -108,11 +108,3 @@ Base: EffectCraft 0.10.0 (commit `05955c0`, "Release 0.10.0").
 - O ícone original do EffectCraft (`assets/app-icon/`, MIT OR Apache-2.0) continua no repositório
   (usado em testes e no app web), mas o app desktop usa o ícone do Efeitos.
 - O app web (`apps/effectcraft-web`) só teve o nome visível trocado.
-
-## Testes
-- `theme::script_font_tests::simplified_chinese_interface_draws_simplified_hanzi_after_another_language`
-  pode falhar de vez em quando quando os testes rodam em paralelo (passa sempre com
-  `--test-threads=1`): o idioma da interface é um estado global do processo, e outros testes agora
-  montam o app com o padrão pt-BR ao mesmo tempo. No programa só há um idioma por vez; não afeta
-  o uso.
-

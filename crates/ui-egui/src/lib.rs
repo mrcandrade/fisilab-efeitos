@@ -2131,13 +2131,13 @@ mod appearance_tests {
         app.set_pref("appearance.darkTheme", json!("darker")).unwrap();
         app.apply_prefs(&ctx);
         assert_eq!(app.ui.theme, ThemeKind::Darker);
-        for (mode, shown) in [("auto", ThemeKind::Darker), ("light", ThemeKind::UfrgsDia), ("dark", ThemeKind::Darker), ("auto", ThemeKind::Darker)] {
+        for (mode, shown) in [("auto", ThemeKind::Darker), ("light", ThemeKind::Light), ("dark", ThemeKind::Darker), ("auto", ThemeKind::Darker)] {
             menus::invoke(&mut app, &ctx, "view.theme.toggle", json!({})).unwrap();
             assert_eq!(app.session.prefs.appearance.appearance_mode, mode);
             assert_eq!(app.ui.theme, shown, "{mode}");
             assert_eq!(app.tokens.kind, shown);
             assert_eq!(app.session.prefs.appearance.dark_theme, "darker");
-            assert_eq!(app.session.prefs.appearance.light_theme, "ufrgsDia");
+            assert_eq!(app.session.prefs.appearance.light_theme, "light");
         }
     }
 
@@ -2153,18 +2153,18 @@ mod appearance_tests {
         app.hooks.system_theme = Some(Box::new(move |_| *read.lock().unwrap_or_else(std::sync::PoisonError::into_inner)));
         app.set_pref("appearance.appearanceMode", json!("auto")).unwrap();
         app.apply_prefs(&ctx);
-        assert_eq!(app.ui.theme, ThemeKind::UfrgsDia);
+        assert_eq!(app.ui.theme, ThemeKind::Light);
         *system.lock().unwrap() = Some(egui::Theme::Dark);
         app.apply_prefs(&ctx);
-        assert_eq!(app.ui.theme, ThemeKind::UfrgsNoite, "a system change applies without a settings change");
+        assert_eq!(app.ui.theme, ThemeKind::Dark, "a system change applies without a settings change");
         *system.lock().unwrap() = None;
         app.apply_prefs(&ctx);
-        assert_eq!(app.ui.theme, ThemeKind::UfrgsNoite);
+        assert_eq!(app.ui.theme, ThemeKind::Dark);
         // A fixed mode ignores the system.
         *system.lock().unwrap() = Some(egui::Theme::Light);
         app.set_pref("appearance.appearanceMode", json!("dark")).unwrap();
         app.apply_prefs(&ctx);
-        assert_eq!(app.ui.theme, ThemeKind::UfrgsNoite);
+        assert_eq!(app.ui.theme, ThemeKind::Dark);
     }
 
     /// Sync with System leaves egui's theme preference at System, so egui never gives the native
@@ -2178,7 +2178,7 @@ mod appearance_tests {
         app.hooks.system_theme = Some(Box::new(|_| Some(egui::Theme::Light)));
         app.set_pref("appearance.appearanceMode", json!("auto")).unwrap();
         app.apply_prefs(&ctx);
-        assert_eq!(app.ui.theme, ThemeKind::UfrgsDia);
+        assert_eq!(app.ui.theme, ThemeKind::Light);
         assert_eq!(ctx.options(|o| o.theme_preference), egui::ThemePreference::System);
         for theme in [egui::Theme::Light, egui::Theme::Dark] {
             assert_eq!(ctx.style_of(theme).visuals.panel_fill, app.tokens.panel_bg, "{theme:?}");
@@ -2194,23 +2194,6 @@ mod appearance_tests {
             assert_eq!(ctx.options(|o| o.theme_preference), pref, "{mode}");
             assert_eq!(ctx.global_style().visuals.panel_fill, app.tokens.panel_bg, "{mode}");
         }
-    }
-
-    /// A fresh install shows the Suíte FisiLab theme "UFRGS Noite"; "UFRGS Dia" is the light one.
-    #[test]
-    fn a_fresh_install_shows_ufrgs_noite() {
-        let ctx = egui::Context::default();
-        let mut app = app();
-        app.apply_prefs(&ctx);
-        assert_eq!(app.ui.theme, ThemeKind::UfrgsNoite);
-        assert_eq!(app.tokens.kind, ThemeKind::UfrgsNoite);
-        assert_eq!(ctx.global_style().visuals.panel_fill, fisilab_brand::palette::NOITE.painel);
-        menus::invoke(&mut app, &ctx, "view.theme.ufrgsDia", json!({})).unwrap();
-        assert_eq!(app.ui.theme, ThemeKind::UfrgsDia);
-        assert_eq!(app.session.prefs.appearance.appearance_mode, "light");
-        menus::invoke(&mut app, &ctx, "view.theme.ufrgsNoite", json!({})).unwrap();
-        assert_eq!(app.ui.theme, ThemeKind::UfrgsNoite);
-        assert_eq!(app.session.prefs.appearance.appearance_mode, "dark");
     }
 
     /// Picking a theme (`view.theme.*`, `ui.set {theme}`) fixes the mode to its family.

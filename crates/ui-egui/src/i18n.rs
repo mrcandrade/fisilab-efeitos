@@ -6874,11 +6874,7 @@ mod tests {
             assert_eq!(supported(locale), language, "{locale:?}");
         }
         let mut app = EffectcraftApp::new(effectcraft_engine::Session::default());
-        // Efeitos (Suíte FisiLab) starts in Brazilian Portuguese; Match System stays available.
-        assert_eq!(app.session.prefs.general.language, "pt-br", "the default");
-        assert_eq!(language(&app), "pt-br");
-        assert!(brazilian_portuguese(&app));
-        app.session.execute("prefs.set", json!({"key":"general.language", "value":"system"})).unwrap();
+        assert_eq!(app.session.prefs.general.language, "system", "the default");
         assert_eq!(japanese(&app), system_language() == "ja");
         assert_eq!(simplified(&app), system_language() == "zh-hans");
         assert_eq!(traditional(&app), system_language() == "zh-hant");

@@ -325,7 +325,7 @@ fn theme_card(
                 }
             });
             ui.add_space(4.0);
-            let kind = ThemeKind::from_name(cur).unwrap_or(if key.ends_with("lightTheme") { ThemeKind::UfrgsDia } else { ThemeKind::UfrgsNoite });
+            let kind = ThemeKind::from_name(cur).unwrap_or(if key.ends_with("lightTheme") { ThemeKind::Light } else { ThemeKind::Dark });
             theme_preview(ui, kind, ui.available_width());
             ui.add_space(4.0);
             for (label, value) in options {

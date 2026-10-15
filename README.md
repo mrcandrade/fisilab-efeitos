@@ -73,10 +73,13 @@ O Efeitos é baseado no **[EffectCraft](https://github.com/storytold/effectcraft
 ([LICENSE-MIT](LICENSE-MIT), [LICENSE-APACHE](LICENSE-APACHE)). Todo o trabalho de edição, efeitos,
 formatos de arquivo e ferramentas é deles: muito obrigado!
 
-O FisiLab alterou o nome, a identidade visual, o tema de cores, a tela de abertura, os links e o
+O FisiLab alterou o nome, a identidade visual, a tela de abertura, os links e o
 instalador; a lista completa está em [MODIFICACOES.md](MODIFICACOES.md). Veja também
 [NOTICE](NOTICE), [ATTRIBUTION.md](ATTRIBUTION.md) (material de terceiros) e o
 [README original](README.upstream.md).
+
+As cores são as originais do EffectCraft, com os temas **Noite** (escuro) e **Dia** (claro) como
+primeiras opções; na primeira execução o programa abre em português (Brasil).
 
 Os nomes e marcas do projeto original pertencem aos seus titulares. Esta versão não é afiliada nem
 endossada por eles.

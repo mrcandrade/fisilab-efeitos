@@ -228,7 +228,11 @@ fn main() -> eframe::Result {
                 }
                 session.config = Some(std::sync::Arc::new(effectcraft_engine::config::DirConfig::new(dir)));
             }
+            let has_saved_settings = session.config.as_deref().is_some_and(|c| c.read(effectcraft_engine::prefs::PREFS_FILE).is_some());
             session.load_settings();
+            if let Some(language) = fresh_install_language(has_saved_settings) {
+                session.prefs.general.language = language.into();
+            }
             // Fit the window to its monitor, or put it back where it was (still hidden).
             let saved_window = session.config.as_deref().and_then(window::load);
             let opened = cc.winit_window().map(|w| window::restore(w, saved_window));
@@ -474,8 +478,20 @@ fn disable_app_nap() {
     }
 }
 
+/// The UI language of a fresh install (no saved settings yet): Brazilian Portuguese, the
+/// language of the Suíte FisiLab. `None` keeps the saved language (upstream's default is `system`).
+fn fresh_install_language(has_saved_settings: bool) -> Option<&'static str> {
+    (!has_saved_settings).then_some("pt-br")
+}
+
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn a_fresh_install_starts_in_portuguese() {
+        assert_eq!(super::fresh_install_language(false), Some("pt-br"));
+        assert_eq!(super::fresh_install_language(true), None, "a saved language is kept");
+    }
+
     use super::{Args, parse_args};
     use std::env::VarError;
 

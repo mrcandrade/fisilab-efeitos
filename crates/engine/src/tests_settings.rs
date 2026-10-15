@@ -112,19 +112,9 @@ fn ui_scale_is_a_percentage_from_75_to_200() {
 #[test]
 fn appearance_defaults_and_legacy_theme_migrate() {
     let p = Prefs::default();
-    assert_eq!(
-        (p.appearance.appearance_mode.as_str(), p.appearance.dark_theme.as_str(), p.appearance.light_theme.as_str()),
-        ("dark", "ufrgsNoite", "ufrgsDia")
-    );
-    assert_eq!(p.appearance.theme, "ufrgsNoite");
-    assert_eq!(p.appearance.resolved_theme(Some(true)), "ufrgsNoite");
-    for (saved, mode, dark, light) in [
-        ("darker", "dark", "darker", "ufrgsDia"),
-        ("light", "light", "ufrgsNoite", "light"),
-        ("dark", "dark", "dark", "ufrgsDia"),
-        ("ufrgsDia", "light", "ufrgsNoite", "ufrgsDia"),
-        ("ufrgsNoite", "dark", "ufrgsNoite", "ufrgsDia"),
-    ] {
+    assert_eq!((p.appearance.appearance_mode.as_str(), p.appearance.dark_theme.as_str(), p.appearance.light_theme.as_str()), ("dark", "dark", "light"));
+    assert_eq!(p.appearance.resolved_theme(Some(true)), "dark");
+    for (saved, mode, dark, light) in [("darker", "dark", "darker", "light"), ("light", "light", "dark", "light"), ("dark", "dark", "dark", "light")] {
         let p = Prefs::from_json(&json!({"version": 2, "appearance": {"theme": saved}}).to_string());
         assert_eq!(p.appearance.appearance_mode, mode, "{saved}");
         assert_eq!(p.appearance.dark_theme, dark, "{saved}");
@@ -137,10 +127,7 @@ fn appearance_defaults_and_legacy_theme_migrate() {
     let p = Prefs::from_json(r#"{"version": 2, "appearance": {"theme": "dark", "appearanceMode": "auto", "darkTheme": "darker"}}"#);
     assert_eq!((p.appearance.appearance_mode.as_str(), p.appearance.dark_theme.as_str()), ("auto", "darker"));
     let p = Prefs::from_json(r#"{"version": 2, "appearance": {"appearanceMode": "sepia", "darkTheme": "light", "lightTheme": 7}}"#);
-    assert_eq!(
-        (p.appearance.appearance_mode.as_str(), p.appearance.dark_theme.as_str(), p.appearance.light_theme.as_str()),
-        ("dark", "ufrgsNoite", "ufrgsDia")
-    );
+    assert_eq!((p.appearance.appearance_mode.as_str(), p.appearance.dark_theme.as_str(), p.appearance.light_theme.as_str()), ("dark", "dark", "light"));
 }
 
 /// The appearance settings take only their choices, survive a restart, and old clients that set
@@ -736,7 +723,7 @@ fn window_graphics_is_validated() {
 fn interface_language_is_validated_persisted_and_backward_compatible() {
     let store = Arc::new(MemoryConfig::default());
     let mut s = Session { config: Some(store.clone()), ..Default::default() };
-    assert_eq!(s.prefs.general.language, "pt-br", "Efeitos starts in Brazilian Portuguese");
+    assert_eq!(s.prefs.general.language, "system", "Match System by default (#229)");
     s.execute("prefs.set", json!({"key": "general.language", "value": "en"})).unwrap();
     s.execute("prefs.set", json!({"key": "general.language", "value": "ja"})).unwrap();
     assert_eq!(s.execute("prefs.get", json!({"key": "general.language"})).unwrap(), json!("ja"));
@@ -784,9 +771,9 @@ fn interface_language_is_validated_persisted_and_backward_compatible() {
     reloaded.load_settings();
     assert_eq!(reloaded.prefs.general.language, "ja");
     reloaded.execute("prefs.reset", json!({"page": "general"})).unwrap();
-    assert_eq!(reloaded.prefs.general.language, "pt-br");
-    assert_eq!(Prefs::from_json(r#"{"general":{"undoLevels":17}}"#).general.language, "pt-br");
-    assert_eq!(Prefs::from_json(r#"{"general":{"language":"unknown"}}"#).general.language, "pt-br");
+    assert_eq!(reloaded.prefs.general.language, "system");
+    assert_eq!(Prefs::from_json(r#"{"general":{"undoLevels":17}}"#).general.language, "system");
+    assert_eq!(Prefs::from_json(r#"{"general":{"language":"unknown"}}"#).general.language, "system");
     assert_eq!(Prefs::from_json(r#"{"general":{"language":"en"}}"#).general.language, "en", "a chosen language stays");
 }
 

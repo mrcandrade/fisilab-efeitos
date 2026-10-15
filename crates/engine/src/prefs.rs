@@ -45,16 +45,16 @@ pub const WINDOW_GRAPHICS: &[(&str, &str)] = &[("Automatic", "auto"), ("OpenGL (
 /// follows the operating system's light or dark appearance.
 pub const APPEARANCE_MODES: &[(&str, &str)] = &[("Sync with System", "auto"), ("Dark", "dark"), ("Light", "light")];
 
-/// The dark family of themes: (label, `appearance.darkTheme` value). The Suíte FisiLab theme
-/// "UFRGS Noite" comes first and is the default.
-pub const DARK_THEMES: &[(&str, &str)] = &[("UFRGS Noite", "ufrgsNoite"), ("Dark", "dark"), ("Darker", "darker")];
+/// The dark family of themes: (label, `appearance.darkTheme` value). "Noite" is the upstream
+/// "Dark" theme.
+pub const DARK_THEMES: &[(&str, &str)] = &[("Noite", "dark"), ("Darker", "darker")];
 
-/// The light family of themes: (label, `appearance.lightTheme` value). The Suíte FisiLab theme
-/// "UFRGS Dia" comes first and is the default.
-pub const LIGHT_THEMES: &[(&str, &str)] = &[("UFRGS Dia", "ufrgsDia"), ("Light", "light")];
+/// The light family of themes: (label, `appearance.lightTheme` value). "Dia" is the upstream
+/// "Light" theme.
+pub const LIGHT_THEMES: &[(&str, &str)] = &[("Dia", "light")];
 
 /// Every theme (the legacy single-theme `appearance.theme`).
-pub const THEMES: &[(&str, &str)] = &[("UFRGS Noite", "ufrgsNoite"), ("UFRGS Dia", "ufrgsDia"), ("Dark", "dark"), ("Darker", "darker"), ("Light", "light")];
+pub const THEMES: &[(&str, &str)] = &[("Noite", "dark"), ("Dia", "light"), ("Darker", "darker")];
 
 /// The settings whose value must be one of their choices.
 fn choices(key: &str) -> Option<&'static [(&'static str, &'static str)]> {
@@ -96,9 +96,8 @@ macro_rules! page {
 
 page!(General {
     /// Interface language: `system` (the operating system's, where EffectCraft has it, else
-    /// English), or a language code from `LANGUAGES`. Efeitos (Suíte FisiLab) starts in
-    /// Brazilian Portuguese.
-    language: String = "pt-br".into(),
+    /// English), or a language code from `LANGUAGES`.
+    language: String = "system".into(),
     /// Levels of Undo (1–99).
     undo_levels: u32 = 32,
     /// Path Point and Handle Size (px).
@@ -169,16 +168,16 @@ page!(Previews {
 });
 
 page!(Appearance {
-    /// The single theme before appearance modes (`ufrgsNoite`, `ufrgsDia`, `dark`, `darker` or
-    /// `light`), kept for older settings files and automation: setting it picks its family's mode
-    /// and theme. While the mode is Dark or Light it mirrors the theme in use.
-    theme: String = "ufrgsNoite".into(),
+    /// The single theme before appearance modes (`dark`, `darker` or `light`), kept for older
+    /// settings files and automation: setting it picks its family's mode and theme. While the mode
+    /// is Dark or Light it mirrors the theme in use.
+    theme: String = "dark".into(),
     /// `auto` (follow the operating system), `dark` or `light`. New installs stay Dark.
     appearance_mode: String = "dark".into(),
-    /// The theme used in dark appearance: `ufrgsNoite` (default), `dark` or `darker`.
-    dark_theme: String = "ufrgsNoite".into(),
-    /// The theme used in light appearance: `ufrgsDia` (default) or `light`.
-    light_theme: String = "ufrgsDia".into(),
+    /// The theme used in dark appearance: `dark` or `darker`.
+    dark_theme: String = "dark".into(),
+    /// The theme used in light appearance: `light`.
+    light_theme: String = "light".into(),
     /// Theme shortcuts in the appearance context menu.
     favorite_themes: Vec<String> = Vec::new(),
     /// User interface brightness, -1 (darker) … 1 (lighter).
