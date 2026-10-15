@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Build and package EffectCraft for Linux (<arch> is x86_64 or aarch64, or riscv64 when cross-compiling):
+# Build and package Efeitos (FisiLab Suite) for Linux (<arch> is x86_64 or aarch64, or riscv64 when cross-compiling):
 #
-#   $DIST/effectcraft-<version>-linux-<arch>.AppImage  any distro with glibc >= the build host's
-#   $DIST/effectcraft-<version>-linux-<arch>.AppImage.zsync  delta updates (needs zsyncmake)
-#   $DIST/effectcraft-<version>-linux-<arch>.deb       Debian, Ubuntu, Mint, Pop!_OS, ...
-#   $DIST/effectcraft-<version>-linux-<arch>.rpm       Fedora, openSUSE, RHEL, ...
-#   $DIST/effectcraft-<version>-linux-<arch>.tar.gz    plain FHS-style tree (bin/, share/)
+#   $DIST/FisiLab-Efeitos-<version>-<arch>.AppImage  any distro with glibc >= the build host's
+#   $DIST/FisiLab-Efeitos-<version>-<arch>.AppImage.zsync  delta updates (needs zsyncmake)
+#   $DIST/fisilab-efeitos_<version>_<deb-arch>.deb   Debian, Ubuntu, Mint, Pop!_OS, ...
+#   $DIST/fisilab-efeitos-<version>-linux-<arch>.rpm  (opt-in) Fedora, openSUSE, RHEL, ...
+#   $DIST/fisilab-efeitos-<version>-linux-<arch>.tar.gz  (opt-in) plain FHS-style tree (bin/, share/)
 #
-# Usage: packaging/linux/package.sh [--skip-build] [--formats "appimage deb rpm tar"]
+# Usage: packaging/linux/package.sh [--skip-build] [--formats "appimage deb"]  (also: rpm, tar)
 #
 # Needs: cargo; nfpm for deb/rpm (https://nfpm.goreleaser.com); appimagetool for the AppImage
 # (downloaded into $CARGO_TARGET_DIR if missing). Build on an old distro (CI: Ubuntu 22.04,
@@ -21,10 +21,11 @@ set -euo pipefail
 # shellcheck source=../env.sh
 . "$(dirname "${BASH_SOURCE[0]}")/../env.sh"
 HERE="$ROOT/packaging/linux"
-APP_ID=ai.storyteller.effectcraft
+APP_ID=br.ufrgs.fisilab.efeitos
+SLUG=fisilab-efeitos
 
 SKIP_BUILD=0
-FORMATS="appimage deb rpm tar"
+FORMATS="appimage deb"
 while [ $# -gt 0 ]; do
   case "$1" in
     --skip-build) SKIP_BUILD=1; shift ;;
@@ -41,16 +42,18 @@ case "$ARCH" in
   aarch64 | arm64) ARCH=aarch64; DEB_ARCH=arm64 ;;
   *) echo "unsupported architecture $ARCH" >&2; exit 2 ;;
 esac
-export EFFECTCRAFT_MAINTAINER="${EFFECTCRAFT_MAINTAINER:-EffectCraft maintainers <effectcraft@storyteller.ai>}"
-BASENAME="effectcraft-$VERSION-linux-$ARCH"
+export EFFECTCRAFT_MAINTAINER="${EFFECTCRAFT_MAINTAINER:-FisiLab - LARFIC/UFRGS <mrcandrade@users.noreply.github.com>}"
+BASENAME="$SLUG-$VERSION-linux-$ARCH"
+APPIMAGE_NAME="FisiLab-Efeitos-$VERSION-$ARCH.AppImage"
+DEB_NAME="${SLUG}_${VERSION}_${DEB_ARCH}.deb"
 
-echo "==> EffectCraft $VERSION for Linux $ARCH ($FORMATS)"
+echo "==> Efeitos $VERSION for Linux $ARCH ($FORMATS)"
 
 if [ "$SKIP_BUILD" = 0 ]; then
   if [ -n "${CROSS_TARGET:-}" ]; then
-    (cd "$ROOT" && cargo build --release --locked -p effectcraft -p effectcraft-cli --target "$CROSS_TARGET")
+    (cd "$ROOT" && cargo build --release --locked -p fisilab-efeitos -p fisilab-efeitos-cli --target "$CROSS_TARGET")
   else
-    (cd "$ROOT" && cargo build --release --locked -p effectcraft -p effectcraft-cli)
+    (cd "$ROOT" && cargo build --release --locked -p fisilab-efeitos -p fisilab-efeitos-cli)
   fi
 fi
 BIN="$CARGO_TARGET_DIR/${CROSS_TARGET:+$CROSS_TARGET/}release"
@@ -59,18 +62,22 @@ STAGE="$WORK/root"
 rm -rf "$WORK"
 
 # ---- stage an FHS tree (shared by every format) -------------------------------------------------
-install -Dm755 "$BIN/effectcraft" "$STAGE/usr/bin/effectcraft"
-install -Dm755 "$BIN/effectcraft-cli" "$STAGE/usr/bin/effectcraft-cli"
-"${CROSS_COMPILE:-}strip" "$STAGE/usr/bin/effectcraft" "$STAGE/usr/bin/effectcraft-cli" 2>/dev/null || true
+install -Dm755 "$BIN/$SLUG" "$STAGE/usr/bin/$SLUG"
+install -Dm755 "$BIN/$SLUG-cli" "$STAGE/usr/bin/$SLUG-cli"
+"${CROSS_COMPILE:-}strip" "$STAGE/usr/bin/$SLUG" "$STAGE/usr/bin/$SLUG-cli" 2>/dev/null || true
 install -Dm644 "$HERE/$APP_ID.desktop" "$STAGE/usr/share/applications/$APP_ID.desktop"
 install -Dm644 "$HERE/$APP_ID.mime.xml" "$STAGE/usr/share/mime/packages/$APP_ID.xml"
 mkdir -p "$STAGE/usr/share/metainfo"
 sed -e "s/@VERSION@/$VERSION/g" -e "s/@DATE@/$EFFECTCRAFT_BUILD_DATE/g" \
   "$HERE/$APP_ID.metainfo.xml.in" >"$STAGE/usr/share/metainfo/$APP_ID.metainfo.xml"
-mkdir -p "$STAGE/usr/share/icons"
-cp -R "$ROOT/assets/app-icon/hicolor" "$STAGE/usr/share/icons/"
-mkdir -p "$STAGE/usr/share/doc/effectcraft"
-copy_docs "$STAGE/usr/share/doc/effectcraft"
+for n in 16 24 32 48 64 128 256 512; do
+  install -Dm644 "$ROOT/assets/fisilab/$SLUG-$n.png" "$STAGE/usr/share/icons/hicolor/${n}x${n}/apps/$APP_ID.png"
+done
+mkdir -p "$STAGE/usr/share/doc/$SLUG"
+copy_docs "$STAGE/usr/share/doc/$SLUG"
+for f in NOTICE ATTRIBUTION.md MODIFICACOES.md; do
+  if [ -f "$ROOT/$f" ]; then cp "$ROOT/$f" "$STAGE/usr/share/doc/$SLUG/"; fi
+done
 
 if command -v desktop-file-validate >/dev/null; then
   desktop-file-validate "$STAGE/usr/share/applications/$APP_ID.desktop"
@@ -97,18 +104,18 @@ if has deb || has rpm; then
   # nfpm expands env vars in fields like `version` and `arch`, but not in `contents[].src`.
   sed "s|\${STAGE}|$STAGE|g" "$HERE/nfpm.yaml" >"$WORK/nfpm.yaml"
   for fmt in deb rpm; do
-    if has "$fmt"; then (cd "$ROOT" && nfpm package -f "$WORK/nfpm.yaml" -p "$fmt" -t "$DIST/$BASENAME.$fmt"); fi
+    if has "$fmt"; then (cd "$ROOT" && nfpm package -f "$WORK/nfpm.yaml" -p "$fmt" -t "$DIST/$([ "$fmt" = deb ] && echo "$DEB_NAME" || echo "$BASENAME.$fmt")"); fi
   done
 fi
 
 # ---- AppImage -----------------------------------------------------------------------------------
 if has appimage; then
-  APPDIR="$WORK/EffectCraft.AppDir"
+  APPDIR="$WORK/Efeitos.AppDir"
   cp -R "$STAGE" "$APPDIR"
   mv "$APPDIR/usr/share/doc" "$WORK/doc-unused"
-  ln -s usr/bin/effectcraft "$APPDIR/AppRun"
+  ln -s usr/bin/$SLUG "$APPDIR/AppRun"
   cp "$HERE/$APP_ID.desktop" "$APPDIR/$APP_ID.desktop"
-  cp "$ROOT/assets/app-icon/hicolor/256x256/apps/$APP_ID.png" "$APPDIR/$APP_ID.png"
+  cp "$ROOT/assets/fisilab/$SLUG-256.png" "$APPDIR/$APP_ID.png"
   ln -s "$APP_ID.png" "$APPDIR/.DirIcon"
 
   TOOL="${APPIMAGETOOL:-$(command -v appimagetool || true)}"
@@ -121,7 +128,7 @@ if has appimage; then
   fi
   # Absolute, because appimagetool runs in $DIST below (CARGO_TARGET_DIR or APPIMAGETOOL may be
   # relative).
-  OUT="$(cd "$DIST" && pwd)/$BASENAME.AppImage"
+  OUT="$(cd "$DIST" && pwd)/$APPIMAGE_NAME"
   APPDIR="$(cd "$APPDIR" && pwd)"
   TOOL="$(cd "$(dirname "$TOOL")" && pwd)/$(basename "$TOOL")"
   # A .zsync left by an earlier run would hide a missing zsyncmake and describe another file.
@@ -130,8 +137,8 @@ if has appimage; then
   # fetch only the blocks that changed in a newer release, through the .zsync published next to
   # each AppImage on GitHub Releases. `latest` is the newest published release that is not a
   # pre-release. A fork's builds point at its own releases through GITHUB_REPOSITORY.
-  REPO="${GITHUB_REPOSITORY:-storytold/effectcraft}"
-  UPDATE_INFO="gh-releases-zsync|${REPO%%/*}|${REPO#*/}|latest|effectcraft-*-linux-$ARCH.AppImage.zsync"
+  REPO="${GITHUB_REPOSITORY:-mrcandrade/larfic}"
+  UPDATE_INFO="gh-releases-zsync|${REPO%%/*}|${REPO#*/}|latest|FisiLab-Efeitos-*-$ARCH.AppImage.zsync"
   # Extract-and-run: works without FUSE (containers, CI). The output embeds the static runtime,
   # so users don't need libfuse2 either. With zsyncmake on the host (CI installs the zsync
   # package) appimagetool also writes the .zsync, into its working directory, hence the cd.
@@ -145,9 +152,9 @@ if has appimage; then
 fi
 
 if [ -z "${CROSS_TARGET:-}" ]; then
-  "$STAGE/usr/bin/effectcraft-cli" --version
+  "$STAGE/usr/bin/$SLUG-cli" --version
 elif [ -n "${EMULATOR:-}" ]; then
-  "$EMULATOR" "$STAGE/usr/bin/effectcraft-cli" --version
+  "$EMULATOR" "$STAGE/usr/bin/$SLUG-cli" --version
 fi
 echo "==> done"
 ls -lh "$DIST"

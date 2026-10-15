@@ -1,5 +1,5 @@
 //! Desktop integration for the AppImage. Wayland compositors (GNOME, KDE…) show a window's icon
-//! from the desktop entry named by its app ID (`ai.storyteller.effectcraft.desktop`). The .deb,
+//! from the desktop entry named by its app ID (`br.ufrgs.fisilab.efeitos.desktop`). The .deb,
 //! .rpm and Flatpak packages install one; an AppImage installs nothing, so its window got the
 //! generic icon. Started from an AppImage (`$APPIMAGE`), the app adds a hidden entry
 //! (`NoDisplay=true`: no menu item) pointing at it and its icon under the user's data folder

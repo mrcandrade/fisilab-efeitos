@@ -12,6 +12,7 @@ Base: EffectCraft 0.10.0 (commit `05955c0`, "Release 0.10.0").
 
 ### Nome e marca
 
+- **Empacotamento Linux (AppImage e .deb)** com os novos nomes, ícones e ids (`br.ufrgs.fisilab.efeitos`).
 - **Nome visível ao usuário: EffectCraft → Efeitos** — título da janela, nome do app no
   `eframe`, menus ("Sobre o Efeitos…", "Sair do Efeitos"…), diálogos, tela inicial, dicas,
   mensagens de erro e de status, saída de `--version`/ajuda da linha de comando, e os catálogos de

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Metadados AppStream (centrais de programas). Modelo: o package.sh substitui @VERSION@ e @DATE@
+     pela versão do Cargo.toml e pela data da compilação. -->
+<component type="desktop-application">
+  <id>br.ufrgs.fisilab.efeitos</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT OR Apache-2.0</project_license>
+  <name>Efeitos</name>
+  <summary>Animação gráfica e composição</summary>
+  <developer id="br.ufrgs.fisilab">
+    <name>FisiLab — LARFIC</name>
+  </developer>
+  <description>
+    <p>
+      O Efeitos é um programa livre de animação gráfica e composição de efeitos visuais: camadas
+      com quadros-chave e editor de gráficos, máscaras e formas, animadores de texto, expressões,
+      câmeras e luzes 3D, mais de 300 efeitos e fila de renderização, com composição por GPU.
+    </p>
+    <p>
+      Faz parte da Suíte FisiLab (alternativa livre). Baseado no EffectCraft, do ArtCraft Team e
+      contribuidores (MIT ou Apache 2.0).
+    </p>
+  </description>
+  <launchable type="desktop-id">br.ufrgs.fisilab.efeitos.desktop</launchable>
+  <icon type="stock">br.ufrgs.fisilab.efeitos</icon>
+  <!-- Só tipos de url conhecidos pelo appstream 0.15 (Ubuntu 22.04, onde o CI valida): sem vcs-browser. -->
+  <url type="homepage">https://github.com/mrcandrade/larfic</url>
+  <url type="bugtracker">https://github.com/mrcandrade/fisilab-efeitos/issues</url>
+  <categories>
+    <category>AudioVideo</category>
+    <category>Video</category>
+    <category>Graphics</category>
+  </categories>
+  <keywords>
+    <keyword>animação</keyword>
+    <keyword>efeitos visuais</keyword>
+    <keyword>composição</keyword>
+    <keyword>motion graphics</keyword>
+    <keyword>vídeo</keyword>
+  </keywords>
+  <branding>
+    <color type="primary" scheme_preference="light">#9fd0ff</color>
+    <color type="primary" scheme_preference="dark">#1f64ba</color>
+  </branding>
+  <requires>
+    <display_length compare="ge">760</display_length>
+  </requires>
+  <supports>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <control>tablet</control>
+  </supports>
+  <provides>
+    <binary>fisilab-efeitos</binary>
+  </provides>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="@VERSION@" date="@DATE@"/>
+  </releases>
+</component>

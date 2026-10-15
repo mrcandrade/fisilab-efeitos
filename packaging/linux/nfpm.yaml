@@ -3,7 +3,7 @@
 # exports VERSION and NFPM_ARCH.
 #
 #   nfpm package -f packaging/linux/nfpm.yaml -p deb -t dist/release/
-name: effectcraft
+name: fisilab-efeitos
 arch: ${NFPM_ARCH}
 platform: linux
 version: ${VERSION}
@@ -13,15 +13,16 @@ release: 1
 section: graphics
 priority: optional
 maintainer: ${EFFECTCRAFT_MAINTAINER}
-vendor: Learning Machines LLC
-homepage: https://github.com/mrcandrade/fisilab-efeitos
+vendor: FisiLab - LARFIC/UFRGS
+homepage: https://github.com/mrcandrade/larfic
 license: MIT OR Apache-2.0
 description: |-
-  Open-source motion graphics and visual effects compositor.
-  Layers with keyframes and a graph editor, masks and shapes, text animators,
-  expressions, 3D cameras and lights, over 300 effects and a render queue
-  (H.264, HEVC, AV1, ProRes, WebM, image sequences); GPU compositing (wgpu).
-  Includes effectcraft-cli, a headless renderer, command runner and MCP server.
+  Animação gráfica e composição de efeitos visuais, da Suíte FisiLab (alternativa livre).
+  Camadas com quadros-chave e editor de gráficos, máscaras e formas, animadores de texto,
+  expressões, câmeras e luzes 3D, mais de 300 efeitos e fila de renderização (H.264, HEVC, AV1,
+  ProRes, WebM, sequências de imagens); composição por GPU (wgpu).
+  Inclui fisilab-efeitos-cli, um renderizador sem janela, executor de comandos e servidor MCP.
+  Baseado no EffectCraft, do ArtCraft Team e contribuidores (MIT ou Apache 2.0).
 
 # The binaries link only glibc and libgcc_s directly. Windowing (X11/Wayland, xkbcommon) and the
 # GPU (Vulkan, EGL/GL) are loaded at runtime, so they are dependencies/recommendations here
@@ -58,11 +59,11 @@ overrides:
       - xdg-desktop-portal
 
 contents:
-  - src: ${STAGE}/usr/bin/effectcraft
-    dst: /usr/bin/effectcraft
+  - src: ${STAGE}/usr/bin/fisilab-efeitos
+    dst: /usr/bin/fisilab-efeitos
     file_info: { mode: 0755 }
-  - src: ${STAGE}/usr/bin/effectcraft-cli
-    dst: /usr/bin/effectcraft-cli
+  - src: ${STAGE}/usr/bin/fisilab-efeitos-cli
+    dst: /usr/bin/fisilab-efeitos-cli
     file_info: { mode: 0755 }
   - src: ${STAGE}/usr/share/
     dst: /usr/share/

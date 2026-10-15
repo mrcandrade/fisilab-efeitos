@@ -49,6 +49,10 @@ efeitos e renderiza o resultado.
 
 Baixe o instalador `FisiLab-Efeitos-Setup-<versão>.exe` na [página de downloads da Suíte FisiLab](https://github.com/mrcandrade/larfic/releases/latest) e execute-o.
 
+### Linux
+
+Baixe `FisiLab-Efeitos-<versão>-x86_64.AppImage` na [página de downloads da Suíte FisiLab](https://github.com/mrcandrade/larfic/releases/latest), marque-o como executável (`chmod +x` ou Propriedades › Permitir executar) e abra-o; ou, no Ubuntu/Debian, instale `fisilab-efeitos_<versão>_amd64.deb` com `sudo apt install ./fisilab-efeitos_<versão>_amd64.deb`. Requer Ubuntu 22.04 ou mais recente (ou equivalente).
+
 ### Compilar a partir do código
 
 É preciso ter o [Rust](https://rustup.rs/) 1.95 ou mais recente.
