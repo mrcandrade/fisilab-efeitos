@@ -209,7 +209,7 @@ fn native_query(_: &JsValue, args: &[JsValue], ctx: &mut Context) -> JsResult<Js
     let a = arg_json(args, 1, ctx)?;
     let r = with_active(|act| match kind.as_str() {
         "app" => Ok(json!({
-            "version": format!("26.0 (FisiEfeitos {})", env!("CARGO_PKG_VERSION")),
+            "version": format!("26.0 (Efeitos {})", env!("CARGO_PKG_VERSION")),
             "buildName": env!("CARGO_PKG_VERSION"),
             "scriptName": act.name,
             "allowFiles": act.session.prefs.scripting.allow_scripts_write_files,
@@ -437,7 +437,7 @@ fn native_file(_: &JsValue, args: &[JsValue], ctx: &mut Context) -> JsResult<JsV
                 Ok(json!(r.is_ok()))
             }
             "network" => Err(if s.prefs.scripting.allow_scripts_write_files {
-                "network access from scripts is not supported in FisiEfeitos".to_string()
+                "network access from scripts is not supported in Efeitos".to_string()
             } else {
                 format!("scripts can't access the network unless {GATE} is on")
             }),

@@ -27,9 +27,9 @@ pub fn show(app: &mut EffectcraftApp, ui: &mut egui::Ui, rect: Rect) {
     let brand = Rect::from_min_size(pos2(x, cy - 12.0), vec2(24.0, 24.0));
     paint_logo(&p, brand);
     let bresp = ui.interact(brand, egui::Id::new("brand"), Sense::click());
-    app.auto.add_response("header.about", &bresp, "About FisiEfeitos");
+    app.auto.add_response("header.about", &bresp, "About Efeitos");
     widgets::focus_outline(ui, &bresp, &t);
-    if bresp.on_hover_text(tr("About FisiEfeitos")).clicked() {
+    if bresp.on_hover_text(tr("About Efeitos")).clicked() {
         app.dialog = Some(Dialog::About);
     }
     x += 32.0;
@@ -653,20 +653,20 @@ fn ws_menu(app: &mut EffectcraftApp, ui: &mut egui::Ui) {
     }
 }
 
-/// The FisiEfeitos app icon (Suíte FisiLab, `assets/fisilab`). The upstream ArtCraft mark is a
+/// The Efeitos app icon (Suíte FisiLab, `assets/fisilab`). The upstream ArtCraft mark is a
 /// trademark not covered by the open-source license, so this version doesn't ship it.
-static APP_MARK: &[u8] = include_bytes!("../../../assets/fisilab/fisiefeitos-128.png");
+static APP_MARK: &[u8] = include_bytes!("../../../assets/fisilab/fisilab-efeitos-128.png");
 
 /// The app icon in `r` (decoded once into a mipmapped texture, so it stays crisp from the
 /// 24 px Tools bar to the About dialog). Nothing is drawn if it can't be decoded.
 pub fn paint_logo(p: &egui::Painter, r: Rect) {
     let ctx = p.ctx();
-    let id = egui::Id::new("fisiefeitos-mark");
+    let id = egui::Id::new("fisilab-efeitos-mark");
     let tex = ctx.data(|d| d.get_temp::<Option<egui::TextureHandle>>(id)).unwrap_or_else(|| {
         let tex = image::load_from_memory_with_format(APP_MARK, image::ImageFormat::Png).ok().map(|img| {
             let img = img.to_rgba8();
             let ci = egui::ColorImage::from_rgba_unmultiplied([img.width() as usize, img.height() as usize], img.as_raw());
-            ctx.load_texture("fisiefeitos-mark", ci, egui::TextureOptions::LINEAR.with_mipmap_mode(Some(egui::TextureFilter::Linear)))
+            ctx.load_texture("fisilab-efeitos-mark", ci, egui::TextureOptions::LINEAR.with_mipmap_mode(Some(egui::TextureFilter::Linear)))
         });
         ctx.data_mut(|d| d.insert_temp(id, tex.clone()));
         tex

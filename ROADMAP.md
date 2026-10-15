@@ -113,7 +113,7 @@ Ranked; detail in [docs/roadmap.md](docs/roadmap.md) and [docs/gaps.md](docs/gap
 | 5 | Performance: benchmarks at 1080p / 4K, real-time cached playback, hardware video (G5) | 50–100 |
 | 6 | Localization depth: effect names, all panels, Korean / Italian (G9) | 60–110 |
 
-(FisiEfeitos, Suíte FisiLab: tell us what matters most to you in the [issue tracker](https://github.com/mrcandrade/fisiefeitos/issues).)
+(Efeitos, Suíte FisiLab: tell us what matters most to you in the [issue tracker](https://github.com/mrcandrade/fisilab-efeitos/issues).)
 
 ## Progress log
 

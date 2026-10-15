@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="assets/fisilab/fisiefeitos-256.png" alt="Ícone do FisiEfeitos" width="128">
+  <img src="assets/fisilab/fisilab-efeitos-256.png" alt="Ícone do Efeitos" width="128">
 </p>
 
-<h1 align="center">FisiEfeitos</h1>
+<h1 align="center">Efeitos · Suíte FisiLab</h1>
 
 <p align="center">
   <b>Animação gráfica e composição</b><br>
@@ -16,7 +16,7 @@
 
 ---
 
-O FisiEfeitos faz parte da **Suíte FisiLab** e é uma versão do
+O Efeitos faz parte da **Suíte FisiLab** e é uma versão do
 [EffectCraft](https://github.com/storytold/effectcraft), um compositor de código aberto para
 animação gráfica e efeitos visuais escrito em Rust. Serve para títulos animados, motion graphics e
 composição: você monta uma composição com camadas, anima as propriedades com quadros-chave, aplica
@@ -40,35 +40,35 @@ efeitos e renderiza o resultado.
 - **3D clássico:** camadas 3D, câmeras com profundidade de campo e luzes com sombras suaves.
 - **Fila de renderização:** H.264 e HEVC (MP4), ProRes (MOV), AV1, WebM, sequências PNG/JPEG/TIFF/EXR,
   GIF animado e WAV/AIFF, tudo em Rust puro, sem FFmpeg; importação e exportação de **Lottie**.
-- **Projetos legíveis** (`.ecproj`, JSON versionado), linha de comando (`fisiefeitos-cli`) e
+- **Projetos legíveis** (`.ecproj`, JSON versionado), linha de comando (`fisilab-efeitos-cli`) e
   servidor MCP para automação.
 
 ## Instalação
 
 ### Windows
 
-Baixe o instalador `FisiEfeitos-Setup-<versão>.exe` no portal de downloads da
+Baixe o instalador `FisiLab-Efeitos-Setup-<versão>.exe` no portal de downloads da
 [Suíte FisiLab](https://github.com/mrcandrade/larfic/tree/main/suite-fisilab) ou na página de
-[Releases](https://github.com/mrcandrade/fisiefeitos/releases) do repositório
-`mrcandrade/fisiefeitos` e execute-o.
+[Releases](https://github.com/mrcandrade/fisilab-efeitos/releases) do repositório
+`mrcandrade/fisilab-efeitos` e execute-o.
 
 ### Compilar a partir do código
 
 É preciso ter o [Rust](https://rustup.rs/) 1.95 ou mais recente.
 
 ```sh
-git clone https://github.com/mrcandrade/fisiefeitos
-cd fisiefeitos
-cargo run --release -p effectcraft            # o aplicativo (fisiefeitos.exe); `-- --demo` abre o projeto de demonstração
-cargo run --release -p effectcraft-cli -- --help   # a linha de comando (fisiefeitos-cli.exe)
+git clone https://github.com/mrcandrade/fisilab-efeitos
+cd fisilab-efeitos
+cargo run --release -p effectcraft            # o aplicativo (fisilab-efeitos.exe); `-- --demo` abre o projeto de demonstração
+cargo run --release -p effectcraft-cli -- --help   # a linha de comando (fisilab-efeitos-cli.exe)
 ```
 
 Os pacotes Rust mantêm os nomes do projeto original (`effectcraft`, `effectcraft-cli`); os
-executáveis gerados se chamam `fisiefeitos` e `fisiefeitos-cli`.
+executáveis gerados se chamam `fisilab-efeitos` e `fisilab-efeitos-cli`.
 
 ## Créditos
 
-O FisiEfeitos é baseado no **[EffectCraft](https://github.com/storytold/effectcraft)**, criado pelo
+O Efeitos é baseado no **[EffectCraft](https://github.com/storytold/effectcraft)**, criado pelo
 **ArtCraft Team e contribuidores** e distribuído sob a licença MIT ou Apache 2.0, à sua escolha
 ([LICENSE-MIT](LICENSE-MIT), [LICENSE-APACHE](LICENSE-APACHE)). Todo o trabalho de edição, efeitos,
 formatos de arquivo e ferramentas é deles: muito obrigado!

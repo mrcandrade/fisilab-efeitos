@@ -15,11 +15,11 @@ fn config_dir(name: &str) -> PathBuf {
     d
 }
 
-/// Runs the app, which must exit at once with `fisiefeitos: <message>` and a failure status. A
+/// Runs the app, which must exit at once with `fisilab-efeitos: <message>` and a failure status. A
 /// regression fails instead of leaving a window open: the process is killed after 5 s.
 fn rejects(name: &str, args: &[&str], env: &[(&str, &str)], message: &str) {
     let config = config_dir(name);
-    let mut cmd = Command::new(env!("CARGO_BIN_EXE_fisiefeitos"));
+    let mut cmd = Command::new(env!("CARGO_BIN_EXE_fisilab-efeitos"));
     cmd.args(args).env_remove("EFFECTCRAFT_CONTROL_PORT").env_remove("RUST_LOG").env("EFFECTCRAFT_CONFIG_DIR", &config);
     for (k, v) in env {
         cmd.env(k, v);
@@ -40,7 +40,7 @@ fn rejects(name: &str, args: &[&str], env: &[(&str, &str)], message: &str) {
     assert!(!timed_out, "{args:?}: the app started or did not exit promptly");
     assert_eq!(out.status.code(), Some(1), "{args:?}");
     assert!(out.stdout.is_empty(), "{args:?}: {:?}", String::from_utf8_lossy(&out.stdout));
-    assert_eq!(String::from_utf8(out.stderr).unwrap(), format!("fisiefeitos: {message}\n"), "{args:?}");
+    assert_eq!(String::from_utf8(out.stderr).unwrap(), format!("fisilab-efeitos: {message}\n"), "{args:?}");
     let written: Vec<_> = std::fs::read_dir(&config).unwrap().collect();
     assert!(written.is_empty(), "{args:?}: wrote {written:?}");
     let _ = std::fs::remove_dir_all(&config);
@@ -67,7 +67,7 @@ fn a_bad_control_port_stops_the_launch() {
 
 #[test]
 fn version_still_prints_with_a_bad_port_variable() {
-    let out = Command::new(env!("CARGO_BIN_EXE_fisiefeitos")).arg("--version").env("EFFECTCRAFT_CONTROL_PORT", "abc").output().unwrap();
+    let out = Command::new(env!("CARGO_BIN_EXE_fisilab-efeitos")).arg("--version").env("EFFECTCRAFT_CONTROL_PORT", "abc").output().unwrap();
     assert!(out.status.success(), "{}", String::from_utf8_lossy(&out.stderr));
     assert_eq!(String::from_utf8(out.stdout).unwrap(), format!("effectcraft {}\n", env!("CARGO_PKG_VERSION")));
 }

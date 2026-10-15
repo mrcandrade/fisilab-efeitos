@@ -1,13 +1,13 @@
 [package]
 name = "effectcraft"
-description = "FisiEfeitos (Suíte FisiLab) desktop app, based on EffectCraft"
+description = "Efeitos (Suíte FisiLab) desktop app, based on EffectCraft"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-default-run = "fisiefeitos"
+default-run = "fisilab-efeitos"
 
 [[bin]]
-name = "fisiefeitos"
+name = "fisilab-efeitos"
 path = "src/main.rs"
 
 [lints]

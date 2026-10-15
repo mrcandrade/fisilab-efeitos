@@ -25,10 +25,10 @@ fn docs(s: &mut Session, p: &Value) -> Result<Value> {
 
 pub fn specs() -> Vec<CommandSpec> {
     vec![
-        cmd!("help.docs", "FisiEfeitos Help...", [], Some("F1"), "{page?: help|scripting|expressions|effects|agents}", always, docs),
+        cmd!("help.docs", "Efeitos Help...", [], Some("F1"), "{page?: help|scripting|expressions|effects|agents}", always, docs),
         cmd!("help.website", "Site da Suíte FisiLab", ["Help"], None, "{}", always, |s, _| open(s, links::WEBSITE.into())),
         cmd!("help.manifesto", "Manifesto pelas tecnologias livres", ["Help"], None, "{}", always, |s, _| open(s, links::MANIFESTO.into())),
-        cmd!("help.appPage", "FisiEfeitos Home Page", ["Help"], None, "{}", always, |s, _| open(s, links::APP_PAGE.into())),
+        cmd!("help.appPage", "Efeitos Home Page", ["Help"], None, "{}", always, |s, _| open(s, links::APP_PAGE.into())),
         cmd!("help.github", "Projeto original (EffectCraft)", ["Help"], None, "{}", always, |s, _| open(s, links::GITHUB.into())),
         cmd!("help.onlineTutorials", "Online Tutorials...", ["Help"], None, "{}", always, |s, _| open(s, links::APP_PAGE.into())),
         cmd!("help.inAppTutorials", "In-App Tutorials...", ["Help"], None, "{} → the Home screen's Learn tab", always, |s, p| super::frontend(

@@ -42,5 +42,5 @@ cargo xtask ci                           # what every commit must pass
 
 ## Talk to us
 
-Questions, ideas and bug reports for FisiEfeitos (Suíte FisiLab) are welcome in its
-[issue tracker](https://github.com/mrcandrade/fisiefeitos/issues).
+Questions, ideas and bug reports for Efeitos (Suíte FisiLab) are welcome in its
+[issue tracker](https://github.com/mrcandrade/fisilab-efeitos/issues).

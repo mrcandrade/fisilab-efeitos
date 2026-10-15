@@ -5,12 +5,12 @@
 //! terminal, so that file is what a bug report can attach. The last few hundred warnings and
 //! errors are also kept in memory for the System Compatibility Report.
 //!
-//! Levels: `info` for EffectCraft's own crates, `warn` for everything else (wgpu and naga are
-//! chatty). `RUST_LOG` replaces that (a level such as `debug`, or per target:
+//! Levels: `info` for Efeitos's own crates (`effectcraft_*`, and the `fisilab_efeitos` /
+//! `fisilab_efeitos_cli` binaries), `warn` for everything else (wgpu and naga are chatty). `RUST_LOG` replaces that (a level such as `debug`, or per target:
 //! `effectcraft=debug,wgpu=warn`).
 //!
 //! Help ▸ Enable Logging ([`set_enabled`], the `help.enableLogging` command) additionally appends
-//! every EffectCraft record to `Logs/EffectCraft Log.txt`, across launches.
+//! every Efeitos record to `Logs/Efeitos Log.txt`, across launches.
 //!
 //! Frontends call [`install`] once at startup and the desktop app [`attach_session_log`] once the
 //! settings folder is known; records logged before that are kept (up to [`MAX_PENDING`]) and
@@ -34,8 +34,9 @@ pub const KEEP: usize = 2;
 pub const MAX_FILE_BYTES: u64 = 16 * 1024 * 1024;
 /// Records kept in memory until the session log is attached.
 pub const MAX_PENDING: usize = 512;
-/// The filter when `RUST_LOG` is unset or empty.
-pub const DEFAULT_FILTER: &str = "warn,effectcraft=info";
+/// The filter when `RUST_LOG` is unset or empty. The binaries are named `fisilab-efeitos` and
+/// `fisilab-efeitos-cli`, so their own records log under the `fisilab_efeitos` target prefix.
+pub const DEFAULT_FILTER: &str = "warn,effectcraft=info,fisilab_efeitos=info";
 
 static ENABLED: AtomicBool = AtomicBool::new(false);
 /// The filter for standard error and the session log: (target prefix or every target, level).
@@ -180,7 +181,7 @@ pub fn log_dir(config_dir: Option<&Path>) -> PathBuf {
 
 /// Help ▸ Enable Logging's file inside `config_dir` (the settings folder), or the temporary folder.
 pub fn log_path(config_dir: Option<&Path>) -> PathBuf {
-    log_dir(config_dir).join("FisiEfeitos Log.txt")
+    log_dir(config_dir).join("Efeitos Log.txt")
 }
 
 fn numbered(dir: &Path, n: usize) -> PathBuf {
@@ -347,6 +348,8 @@ mod tests {
         let f = parse_filter(DEFAULT_FILTER);
         assert_eq!(level_for(&f, "effectcraft"), LevelFilter::Info);
         assert_eq!(level_for(&f, "effectcraft_ui_egui::app"), LevelFilter::Info);
+        assert_eq!(level_for(&f, "fisilab_efeitos::launch_guard"), LevelFilter::Info);
+        assert_eq!(level_for(&f, "fisilab_efeitos_cli"), LevelFilter::Info);
         assert_eq!(level_for(&f, "wgpu_core::device"), LevelFilter::Warn);
         assert_eq!(level_for(&f, "naga"), LevelFilter::Warn);
     }

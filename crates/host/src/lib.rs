@@ -97,10 +97,10 @@ pub fn session() -> Session {
     }
 }
 
-/// The platform config directory for EffectCraft (`EFFECTCRAFT_CONFIG_DIR` overrides):
-/// `~/Library/Application Support/EffectCraft` (macOS), `%APPDATA%\EffectCraft` (Windows),
-/// `$XDG_CONFIG_HOME/effectcraft` or `~/.config/effectcraft` (Linux and others). A `portable.txt`
-/// beside the executable puts it in `EffectCraftData` there instead ([`app_dirs`]).
+/// The platform config directory for Efeitos (`EFFECTCRAFT_CONFIG_DIR` overrides):
+/// `~/Library/Application Support/FisiLab Efeitos` (macOS), `%APPDATA%\FisiLab Efeitos` (Windows),
+/// `$XDG_CONFIG_HOME/fisilab-efeitos` or `~/.config/fisilab-efeitos` (Linux and others). A
+/// `portable.txt` beside the executable puts it in `FisiLabEfeitosData` there instead ([`app_dirs`]).
 pub fn config_dir() -> Option<std::path::PathBuf> {
     app_dirs::current().dir.clone()
 }

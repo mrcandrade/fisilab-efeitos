@@ -96,7 +96,7 @@ macro_rules! page {
 
 page!(General {
     /// Interface language: `system` (the operating system's, where EffectCraft has it, else
-    /// English), or a language code from `LANGUAGES`. FisiEfeitos (Suíte FisiLab) starts in
+    /// English), or a language code from `LANGUAGES`. Efeitos (Suíte FisiLab) starts in
     /// Brazilian Portuguese.
     language: String = "pt-br".into(),
     /// Levels of Undo (1–99).
@@ -1155,7 +1155,7 @@ pub fn pages() -> Vec<Page> {
                 s("general.expressionPickWhipCompact", "Expression Pick Whip Writes Compact English", B, true),
                 s("general.createSplitLayersAbove", "Create Split Layers Above Original Layer", B, true),
                 s("general.useSystemColorPicker", "Use System Color Picker", B, false),
-                Note("FisiEfeitos always uses its own colour picker (the same on every platform and the web)."),
+                Note("Efeitos always uses its own colour picker (the same on every platform and the web)."),
             ],
         },
         Page {
@@ -1167,7 +1167,7 @@ pub fn pages() -> Vec<Page> {
                 s("startup.offerCrashRecovery", "Offer to Open the Latest Auto-Save After a Crash", B, true),
                 s("startup.windowGraphics", "Window Graphics", Kind::Choice(WINDOW_GRAPHICS), true),
                 Note(
-                    "Window Graphics applies from the next launch. When the graphics driver stops FisiEfeitos as its window opens, the next launch switches to OpenGL.",
+                    "Window Graphics applies from the next launch. When the graphics driver stops Efeitos as its window opens, the next launch switches to OpenGL.",
                 ),
                 Section("Repair"),
                 Button { label: "Reset Settings", command: "prefs.reset", params: "{}" },

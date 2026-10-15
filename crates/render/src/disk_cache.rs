@@ -276,17 +276,17 @@ pub fn default_folder() -> PathBuf {
     if cfg!(target_os = "macos")
         && let Some(h) = &home
     {
-        return h.join("Library/Caches/FisiEfeitos/Disk Cache");
+        return h.join("Library/Caches/FisiLab Efeitos/Disk Cache");
     }
     if cfg!(windows)
         && let Some(l) = std::env::var_os("LOCALAPPDATA")
     {
-        return PathBuf::from(l).join("FisiEfeitos").join("Disk Cache");
+        return PathBuf::from(l).join("FisiLab Efeitos").join("Disk Cache");
     }
     if let Some(x) = std::env::var_os("XDG_CACHE_HOME") {
-        return PathBuf::from(x).join("fisiefeitos/disk-cache");
+        return PathBuf::from(x).join("fisilab-efeitos/disk-cache");
     }
-    home.map(|h| h.join(".cache/fisiefeitos/disk-cache")).unwrap_or_else(|| std::env::temp_dir().join("fisiefeitos-disk-cache"))
+    home.map(|h| h.join(".cache/fisilab-efeitos/disk-cache")).unwrap_or_else(|| std::env::temp_dir().join("fisilab-efeitos-disk-cache"))
 }
 
 impl DiskCache {

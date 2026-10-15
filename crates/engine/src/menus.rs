@@ -485,8 +485,8 @@ fn effect_categories() -> Vec<MenuNode> {
 
 /// The After Effects menu layout. Labels use "..." like AE's macOS menus.
 pub const TREE: &str = r#"
-[mac] FisiEfeitos
-  About FisiEfeitos... | app.about
+[mac] Efeitos
+  About Efeitos... | app.about
   ---
   Settings...
     General... | app.settings {"page":"general"} | Cmd+Alt+;
@@ -507,11 +507,11 @@ pub const TREE: &str = r#"
     3D... | app.settings {"page":"3d"}
     Scripting & Expressions... | app.settings {"page":"scripting"}
   ---
-  Hide FisiEfeitos | app.hide
+  Hide Efeitos | app.hide
   Hide Others | app.hideOthers
   Show All | app.showAll
   ---
-  Quit FisiEfeitos | app.quit
+  Quit Efeitos | app.quit
 File
   New
     New Project | file.newProject
@@ -538,7 +538,7 @@ File
     File... | file.import
     Multiple Files... | file.importMultiple
     Adobe Premiere Pro Project... | file.importTimeline
-    FisiEfeitos Project... | file.importProject
+    Efeitos Project... | file.importProject
     Placeholder... | file.importPlaceholder
     Solid... | file.importSolid
     Lottie... | file.importLottie
@@ -1230,7 +1230,7 @@ Window
   VR Comp Editor | window.panel {"panel":"vrCompEditor"}
   @dynamic:scriptPanels
 Help
-  FisiEfeitos Help... | help.docs {"page":"help"} | F1
+  Efeitos Help... | help.docs {"page":"help"} | F1
   Scripting Help... | help.docs {"page":"scripting"}
   Expression Reference... | help.docs {"page":"expressions"}
   Effect Reference... | help.docs {"page":"effects"}
@@ -1248,12 +1248,12 @@ Help
   ---
   Site da Suíte FisiLab | help.website
   Manifesto pelas tecnologias livres | help.manifesto
-  FisiEfeitos Home Page | help.appPage
+  Efeitos Home Page | help.appPage
   Projeto original (EffectCraft) | help.github
   Open Demo Project | file.openDemoProject
   ---
   Sobre a Suíte FisiLab… | help.fisilab
-  [!mac] About FisiEfeitos... | app.about
+  [!mac] About Efeitos... | app.about
 "#;
 
 #[cfg(test)]

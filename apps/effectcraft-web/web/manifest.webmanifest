@@ -1,6 +1,6 @@
 {
-  "name": "FisiEfeitos",
-  "short_name": "FisiEfeitos",
+  "name": "Efeitos",
+  "short_name": "Efeitos",
   "description": "Motion graphics and visual effects compositor, in the browser",
   "id": "./",
   "start_url": "./",

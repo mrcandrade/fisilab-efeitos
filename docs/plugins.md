@@ -22,8 +22,8 @@ Guide):
 | `app.settings` (kept in the preferences between sessions) | Kept in `script_settings.json` in the settings folder (`script.settings.get` / `script.settings.save`) | Same |
 | Allow Scripts to Write Files and Access Network | Settings ▸ Scripting & Expressions | Same |
 
-The settings folder is `~/Library/Application Support/EffectCraft` on macOS, `%APPDATA%\EffectCraft`
-on Windows and `$XDG_CONFIG_HOME/effectcraft` (or `~/.config/effectcraft`) on Linux
+The settings folder is `~/Library/Application Support/FisiLab Efeitos` on macOS, `%APPDATA%\FisiLab Efeitos`
+on Windows and `$XDG_CONFIG_HOME/fisilab-efeitos` (or `~/.config/fisilab-efeitos`) on Linux
 ([preferences.md](preferences.md)); the web app keeps it in browser storage.
 
 ## Scripts

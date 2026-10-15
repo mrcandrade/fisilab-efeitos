@@ -31,15 +31,15 @@ mod window;
 use effectcraft_ui_egui::EffectcraftApp;
 use serde_json::json;
 
-/// The app icon for the window, taskbar and Dock: the FisiEfeitos icon of the Suíte FisiLab
+/// The app icon for the window, taskbar and Dock: the Efeitos icon of the Suíte FisiLab
 /// (assets/fisilab). macOS gets the 512 px one for the Dock.
 /// The 256 px app icon (Windows, Linux; the AppImage's desktop integration installs it too).
 #[cfg(not(target_os = "macos"))]
-const ICON_PNG: &[u8] = include_bytes!("../../../assets/fisilab/fisiefeitos-256.png");
+const ICON_PNG: &[u8] = include_bytes!("../../../assets/fisilab/fisilab-efeitos-256.png");
 
 fn app_icon() -> egui::IconData {
     #[cfg(target_os = "macos")]
-    let png: &[u8] = include_bytes!("../../../assets/fisilab/fisiefeitos-512.png");
+    let png: &[u8] = include_bytes!("../../../assets/fisilab/fisilab-efeitos-512.png");
     #[cfg(not(target_os = "macos"))]
     let png: &[u8] = ICON_PNG;
     eframe::icon_data::from_png_bytes(png).unwrap_or_default()
@@ -131,12 +131,12 @@ fn main() -> eframe::Result {
     let Args { control_port, files, demo, home } = match parse_args(std::env::args().skip(1), std::env::var("EFFECTCRAFT_CONTROL_PORT")) {
         Ok(Some(args)) => args,
         Ok(None) => {
-            println!("fisiefeitos {} (Suíte FisiLab, baseado no EffectCraft)", env!("CARGO_PKG_VERSION"));
+            println!("fisilab-efeitos {} (Suíte FisiLab, baseado no EffectCraft)", env!("CARGO_PKG_VERSION"));
             return Ok(());
         }
         // Before the session log, preferences and the window: nothing has started yet.
         Err(e) => {
-            eprintln!("fisiefeitos: {e}");
+            eprintln!("fisilab-efeitos: {e}");
             std::process::exit(1);
         }
     };
@@ -166,14 +166,14 @@ fn main() -> eframe::Result {
     }
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
-            .with_title("FisiEfeitos")
+            .with_title("Efeitos")
             .with_inner_size(window::DEFAULT_SIZE)
             .with_min_inner_size(window::MIN_SIZE)
             .with_drag_and_drop(true)
             // Started for an agent (`--control`): open without taking the user's keyboard focus.
             .with_active(control_port.is_none())
             .with_icon(app_icon())
-            // Wayland matches the window to `br.ufrgs.fisilab.fisiefeitos.desktop` by this ID.
+            // Wayland matches the window to `br.ufrgs.fisilab.efeitos.desktop` by this ID.
             .with_app_id(appimage::APP_ID),
         event_loop_builder: agent_event_loop(control_port.is_some()),
         wgpu_options: wgpu_options(launch.backends),
@@ -189,7 +189,7 @@ fn main() -> eframe::Result {
     #[cfg(target_os = "macos")]
     let apple_events = &apple_events;
     let result = eframe::run_native(
-        "FisiEfeitos",
+        "Efeitos",
         options,
         Box::new(move |cc| {
             match &cc.wgpu_render_state {
@@ -270,26 +270,26 @@ fn main() -> eframe::Result {
                 rfd::FileDialog::new().add_filter("Media", exts).pick_files().unwrap_or_default().into_iter().map(|p| p.to_string_lossy().to_string()).collect()
             }));
             app.hooks.pick_save = Some(Box::new(|name: &str| {
-                rfd::FileDialog::new().add_filter("FisiEfeitos Project", &["ecproj"]).set_file_name(name).save_file().map(|p| p.to_string_lossy().to_string())
+                rfd::FileDialog::new().add_filter("Efeitos Project", &["ecproj"]).set_file_name(name).save_file().map(|p| p.to_string_lossy().to_string())
             }));
             // The window closes after a lost graphics device (#591); say why, unless an agent drives
             // the app through the control channel.
             if control_port.is_none() {
                 app.hooks.device_lost = Some(Box::new(|saved: Option<Result<String, String>>| {
                     let saved = match saved {
-                        Some(Ok(path)) => format!("\n\nYour unsaved changes were saved to:\n{path}\n\nReopen FisiEfeitos to recover them."),
+                        Some(Ok(path)) => format!("\n\nYour unsaved changes were saved to:\n{path}\n\nReopen Efeitos to recover them."),
                         Some(Err(e)) => format!("\n\nYour unsaved changes could not be saved ({e})."),
                         None => String::new(),
                     };
                     rfd::MessageDialog::new()
                         .set_level(rfd::MessageLevel::Error)
-                        .set_title("FisiEfeitos: graphics device lost")
-                        .set_description(format!("The graphics driver stopped responding, so FisiEfeitos has to close.{saved}"))
+                        .set_title("FisiLab Efeitos: graphics device lost")
+                        .set_description(format!("The graphics driver stopped responding, so Efeitos has to close.{saved}"))
                         .show();
                 }));
             }
             app.hooks.pick_open_project = Some(Box::new(|| {
-                rfd::FileDialog::new().add_filter("FisiEfeitos Project", &["ecproj", "ecprojx"]).pick_file().map(|p| p.to_string_lossy().to_string())
+                rfd::FileDialog::new().add_filter("Efeitos Project", &["ecproj", "ecprojx"]).pick_file().map(|p| p.to_string_lossy().to_string())
             }));
             app.hooks.system_theme = appearance::service();
             app.hooks.audio_device = Some(Box::new(audio_out::open));
@@ -361,7 +361,7 @@ fn wgpu_options(backends: Option<eframe::wgpu::Backends>) -> eframe::WgpuConfigu
         // `WGPU_VALIDATION_INDIRECT_CALL=1` turns the check back on.
         setup.instance_descriptor.flags = setup.instance_descriptor.flags.difference(eframe::wgpu::InstanceFlags::VALIDATION_INDIRECT_CALL).with_env();
         setup.device_descriptor = std::sync::Arc::new(|adapter| eframe::wgpu::DeviceDescriptor {
-            label: Some("FisiEfeitos device"),
+            label: Some("Efeitos device"),
             required_limits: device_limits(adapter.limits()),
             ..Default::default()
         });
@@ -381,17 +381,17 @@ fn device_limits(adapter: eframe::wgpu::Limits) -> eframe::wgpu::Limits {
 fn startup_failed(e: &eframe::Error, gl_next: bool) {
     let next = if gl_next { "The next launch will try OpenGL instead. " } else { "" };
     let message = format!(
-        "FisiEfeitos couldn't start its window: {e}\n\n{next}Updating the graphics driver often helps. If it keeps happening, please report it at https://github.com/mrcandrade/fisiefeitos/issues with this message."
+        "Efeitos couldn't start its window: {e}\n\n{next}Updating the graphics driver often helps. If it keeps happening, please report it at https://github.com/mrcandrade/fisilab-efeitos/issues with this message."
     );
     // Standard error and the session log; standard error alone when RUST_LOG turned errors off.
     if log::log_enabled!(log::Level::Error) {
         log::error!("{message}");
     } else {
-        eprintln!("fisiefeitos: {message}");
+        eprintln!("fisilab-efeitos: {message}");
     }
     let _ = rfd::MessageDialog::new()
         .set_level(rfd::MessageLevel::Error)
-        .set_title("FisiEfeitos")
+        .set_title("Efeitos")
         .set_description(message)
         .set_buttons(rfd::MessageButtons::Ok)
         .show();
@@ -467,7 +467,7 @@ fn disable_app_nap() {
     {
         use objc2_foundation::{NSActivityOptions, NSProcessInfo, NSString};
         let info = NSProcessInfo::processInfo();
-        let reason = NSString::from_str("FisiEfeitos control channel");
+        let reason = NSString::from_str("Efeitos control channel");
         let opts = NSActivityOptions::UserInitiatedAllowingIdleSystemSleep | NSActivityOptions::LatencyCritical;
         // Leaked on purpose: the activity lasts for the life of the process.
         std::mem::forget(info.beginActivityWithOptions_reason(opts, &reason));

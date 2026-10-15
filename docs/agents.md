@@ -13,7 +13,7 @@ user can do, an agent can do too. There are three ways in:
 ## Find the presets folder
 
 The native Effects & Presets panel's options menu includes **Copy Presets Folder Path**. It copies
-the folder the panel scans: `EC_PRESETS_DIR` when set, otherwise `~/Documents/EffectCraft/Presets`
+the folder the panel scans: `EC_PRESETS_DIR` when set, otherwise `~/Documents/FisiLab Efeitos/Presets`
 using `HOME` or `USERPROFILE`. Relative paths are resolved to an absolute path. The folder may
 not exist yet; this action does not create it.
 Over the live UI control channel, `ui.menu.invoke {"id":"effects.copyPresetsFolderPath"}` copies
@@ -58,13 +58,13 @@ The release packages ship `effectcraft-cli` alongside the desktop app, so no bui
 
 | Install | CLI |
 |---|---|
-| Windows (MSI) | `C:\Program Files\EffectCraft\effectcraft-cli.exe` by default (wherever you installed it otherwise), not on `PATH` |
+| Windows (MSI) | `C:\Program Files\Suite FisiLab\Efeitos\fisilab-efeitos-cli.exe` by default (wherever you installed it otherwise), not on `PATH` |
 | Linux (deb, rpm) | `/usr/bin/effectcraft-cli` |
 | macOS | the separate `effectcraft-cli-<version>-macos-<arch>.zip` release asset (the `.app` holds only the desktop app) |
 
 ```sh
 # Windows, default install folder
-claude mcp add effectcraft -- "C:\Program Files\EffectCraft\effectcraft-cli.exe" mcp
+claude mcp add effectcraft -- "C:\Program Files\Suite FisiLab\Efeitos\fisilab-efeitos-cli.exe" mcp
 # Linux, or macOS with the CLI unzipped onto PATH
 claude mcp add effectcraft -- effectcraft-cli mcp
 ```

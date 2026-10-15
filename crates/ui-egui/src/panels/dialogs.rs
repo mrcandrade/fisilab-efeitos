@@ -274,7 +274,7 @@ fn about(app: &mut EffectcraftApp, ctx: &egui::Context, t: &Tokens) {
     let mut close = false;
     let mut cmd: Option<&str> = None;
     let tab_id = egui::Id::new("about_tab");
-    modal(ctx, "About FisiEfeitos", vec2(680.0, 520.0), t, |ui| {
+    modal(ctx, "About Efeitos", vec2(680.0, 520.0), t, |ui| {
         let mut tab = ui.data_mut(|d| d.get_temp::<usize>(tab_id)).unwrap_or(0);
         ui.horizontal(|ui| {
             for (i, (label, id)) in ABOUT_TABS.iter().enumerate() {
@@ -321,7 +321,7 @@ fn about(app: &mut EffectcraftApp, ctx: &egui::Context, t: &Tokens) {
     }
 }
 
-/// What FisiEfeitos is, and where it comes from (About tab).
+/// What Efeitos is, and where it comes from (About tab).
 const ABOUT_BLURB: &str = "Compositor de código aberto para animação gráfica e efeitos visuais. Versão da Suíte FisiLab, \
 disponibilizada pelo FisiLab — LARFIC · UFRGS em parceria com o CTA — Centro de Tecnologia Acadêmica, baseada no \
 EffectCraft (© ArtCraft Team e contribuidores, MIT OR Apache-2.0).";
@@ -332,7 +332,7 @@ fn about_main(app: &mut EffectcraftApp, ui: &mut egui::Ui, t: &Tokens, cmd: &mut
     let p = ui.painter();
     p.rect_filled(r, 10.0, Color32::from_rgb(0x1b, 0x22, 0x3c));
     crate::header::paint_logo(p, Rect::from_min_size(r.min + vec2(18.0, 20.0), vec2(56.0, 56.0)));
-    p.text(r.min + vec2(90.0, 34.0), Align2::LEFT_CENTER, "FisiEfeitos", Tokens::semibold(24.0), Color32::WHITE);
+    p.text(r.min + vec2(90.0, 34.0), Align2::LEFT_CENTER, "Efeitos", Tokens::semibold(24.0), Color32::WHITE);
     p.text(
         r.min + vec2(90.0, 62.0),
         Align2::LEFT_CENTER,

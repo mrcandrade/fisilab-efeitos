@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  FisiEfeitos (Suíte FisiLab, based on EffectCraft) MSI (WiX Toolset v5: `dotnet tool install -g wix`). Built by package.ps1:
+  Efeitos (Suíte FisiLab, based on EffectCraft) MSI (WiX Toolset v5: `dotnet tool install -g wix`). Built by package.ps1:
 
     wix build effectcraft.wxs installer-ui.wxs -arch x64 -d Version=1.2.3 -d BinDir=... -d IconPath=... -o out.msi
 
-  Per-machine install into Program Files (or a folder the user picks), a Start Menu shortcut and,
+  Per-machine install into Program Files\Suite FisiLab\Efeitos (or a folder the user picks), a Start Menu shortcut and,
   unless DESKTOPSHORTCUT=0 (the wizard's "Create a desktop shortcut" box), a desktop shortcut.
 -->
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Package
-      Name="FisiEfeitos"
+      Name="Efeitos"
       Manufacturer="FisiLab — LARFIC/UFRGS"
       Version="$(var.Version)"
       UpgradeCode="5E1F3C0A-6B2D-4C7E-9A41-8F0D2B7C6E15"
       Scope="perMachine"
       Compressed="yes"
       Language="1033">
-    <SummaryInformation Description="FisiEfeitos — Animação gráfica e composição (Suíte FisiLab)" Manufacturer="FisiLab — LARFIC/UFRGS" />
+    <SummaryInformation Description="Efeitos — Animação gráfica e composição (Suíte FisiLab)" Manufacturer="FisiLab — LARFIC/UFRGS" />
     <!-- Same-version upgrades let successive pre-releases of one X.Y.Z replace each other
          (MSI versions are numeric, so 1.2.3-rc.1 and 1.2.3-rc.2 are both 1.2.3). -->
     <MajorUpgrade AllowSameVersionUpgrades="yes"
-        DowngradeErrorMessage="Uma versão mais recente do FisiEfeitos já está instalada." />
+        DowngradeErrorMessage="Uma versão mais recente do Efeitos já está instalada." />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
     <!-- The setup wizard (installer-ui.wxs): pick the folder on a fresh install. -->
     <UIRef Id="EffectcraftUI" />
@@ -28,22 +28,22 @@
     <Icon Id="EffectcraftIcon.ico" SourceFile="$(var.IconPath)" />
     <Property Id="ARPPRODUCTICON" Value="EffectcraftIcon.ico" />
     <Property Id="ARPURLINFOABOUT" Value="https://github.com/mrcandrade/larfic/tree/main/suite-fisilab" />
-    <Property Id="ARPURLUPDATEINFO" Value="https://github.com/mrcandrade/fisiefeitos/releases" />
-    <Property Id="ARPHELPLINK" Value="https://github.com/mrcandrade/fisiefeitos/issues" />
+    <Property Id="ARPURLUPDATEINFO" Value="https://github.com/mrcandrade/fisilab-efeitos/releases" />
+    <Property Id="ARPHELPLINK" Value="https://github.com/mrcandrade/fisilab-efeitos/issues" />
 
     <!-- An upgrade, repair or silent reinstall goes where the installed copy already is: the App Paths
          "Path" value written below, or for releases before this installer change (no Path value; they
-         could be put elsewhere with INSTALLFOLDER=...) the folder of the fisiefeitos.exe that App Paths names. A
+         could be put elsewhere with INSTALLFOLDER=...) the folder of the fisilab-efeitos.exe that App Paths names. A
          "file" search with no FileSearch inside yields that file's folder. A folder passed on the
          command line (INSTALLFOLDER=...) wins. -->
     <Property Id="INSTALLFOLDER" Secure="yes" />
     <Property Id="PREVIOUSINSTALLFOLDER" Secure="yes">
       <RegistrySearch Id="PreviousInstallFolder" Root="HKLM" Type="directory"
-          Key="Software\Microsoft\Windows\CurrentVersion\App Paths\fisiefeitos.exe" Name="Path" />
+          Key="Software\Microsoft\Windows\CurrentVersion\App Paths\fisilab-efeitos.exe" Name="Path" />
     </Property>
     <Property Id="PREVIOUSEXEFOLDER" Secure="yes">
       <RegistrySearch Id="PreviousExeFolder" Root="HKLM" Type="file"
-          Key="Software\Microsoft\Windows\CurrentVersion\App Paths\fisiefeitos.exe" />
+          Key="Software\Microsoft\Windows\CurrentVersion\App Paths\fisilab-efeitos.exe" />
     </Property>
     <SetProperty Id="INSTALLFOLDER" Value="[PREVIOUSINSTALLFOLDER]" After="AppSearch" Sequence="both"
         Condition="PREVIOUSINSTALLFOLDER AND NOT INSTALLFOLDER" />
@@ -55,18 +55,20 @@
          to an install from before this option. -->
     <Property Id="DESKTOPSHORTCUT" Value="1" Secure="yes" />
     <Property Id="PREVIOUSDESKTOPSHORTCUT" Secure="yes">
-      <RegistrySearch Id="PreviousDesktopShortcut" Root="HKLM" Type="raw" Key="Software\FisiEfeitos" Name="DesktopShortcut" />
+      <RegistrySearch Id="PreviousDesktopShortcut" Root="HKLM" Type="raw" Key="Software\FisiLab\Efeitos" Name="DesktopShortcut" />
     </Property>
     <SetProperty Id="DESKTOPSHORTCUT" Value="[PREVIOUSDESKTOPSHORTCUT]" After="SetINSTALLFOLDERFromExe" Sequence="both"
         Condition="WIX_UPGRADE_DETECTED" />
 
     <StandardDirectory Id="ProgramFiles6432Folder">
-      <Directory Id="INSTALLFOLDER" Name="FisiEfeitos" />
+      <Directory Id="SuiteFisiLabFolder" Name="Suite FisiLab">
+        <Directory Id="INSTALLFOLDER" Name="Efeitos" />
+      </Directory>
     </StandardDirectory>
     <StandardDirectory Id="ProgramMenuFolder" />
     <StandardDirectory Id="DesktopFolder" />
 
-    <Feature Id="Main" Title="FisiEfeitos" Level="1">
+    <Feature Id="Main" Title="Efeitos" Level="1">
       <ComponentGroupRef Id="EffectcraftFiles" />
     </Feature>
   </Package>
@@ -74,27 +76,27 @@
   <Fragment>
     <ComponentGroup Id="EffectcraftFiles" Directory="INSTALLFOLDER">
       <Component Id="EffectcraftApp" Guid="C3A8E2D4-71B9-4F06-8D5A-2E9F4B1C7A63">
-        <File Id="EffectcraftExe" Source="$(var.BinDir)\fisiefeitos.exe" KeyPath="yes">
-          <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="FisiEfeitos"
-              Description="FisiEfeitos — Animação gráfica e composição" WorkingDirectory="INSTALLFOLDER" Advertise="yes"
+        <File Id="EffectcraftExe" Source="$(var.BinDir)\fisilab-efeitos.exe" KeyPath="yes">
+          <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="Efeitos"
+              Description="Efeitos — Animação gráfica e composição" WorkingDirectory="INSTALLFOLDER" Advertise="yes"
               Icon="EffectcraftIcon.ico" IconIndex="0" />
         </File>
 
-        <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\fisiefeitos.exe" Value="[#EffectcraftExe]" Type="string" />
-        <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\fisiefeitos.exe" Name="Path" Value="[INSTALLFOLDER]" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\fisilab-efeitos.exe" Value="[#EffectcraftExe]" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\fisilab-efeitos.exe" Name="Path" Value="[INSTALLFOLDER]" Type="string" />
         <!-- The desktop shortcut choice, for the next upgrade (empty: none). -->
-        <RegistryValue Root="HKLM" Key="Software\FisiEfeitos" Name="DesktopShortcut" Value="[DESKTOPSHORTCUT]" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\FisiLab\Efeitos" Name="DesktopShortcut" Value="[DESKTOPSHORTCUT]" Type="string" />
       </Component>
 
       <Component Id="EffectcraftCli">
-        <File Id="EffectcraftCliExe" Source="$(var.BinDir)\fisiefeitos-cli.exe" KeyPath="yes" />
+        <File Id="EffectcraftCliExe" Source="$(var.BinDir)\fisilab-efeitos-cli.exe" KeyPath="yes" />
       </Component>
 
       <!-- A component under the user's profile folders needs an HKCU key path (ICE38, ICE43). -->
       <Component Id="DesktopShortcut" Directory="DesktopFolder" Condition="DESKTOPSHORTCUT = &quot;1&quot;">
-        <Shortcut Id="DesktopShortcut" Name="FisiEfeitos" Description="FisiEfeitos — Animação gráfica e composição"
+        <Shortcut Id="DesktopShortcut" Name="Efeitos" Description="Efeitos — Animação gráfica e composição"
             Target="[#EffectcraftExe]" WorkingDirectory="INSTALLFOLDER" Icon="EffectcraftIcon.ico" IconIndex="0" />
-        <RegistryValue Root="HKCU" Key="Software\FisiEfeitos" Name="DesktopShortcut" Value="1" Type="string" KeyPath="yes" />
+        <RegistryValue Root="HKCU" Key="Software\FisiLab\Efeitos" Name="DesktopShortcut" Value="1" Type="string" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>

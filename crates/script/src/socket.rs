@@ -41,7 +41,7 @@ mod imp {
         match op {
             "connected" | "eof" => json!({"value": op == "eof"}),
             "close" => json!({}),
-            _ => err("sockets are not available in the web version of FisiEfeitos"),
+            _ => err("sockets are not available in the web version of Efeitos"),
         }
     }
 }

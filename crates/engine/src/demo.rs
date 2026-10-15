@@ -11,7 +11,7 @@ use effectcraft_project::build::{self, Ids};
 use effectcraft_project::{Comp, ItemId, ItemKind, Layer, LayerSource, Project, PropGroup, Solid};
 use effectcraft_time::{FrameRate, Tick};
 
-pub const MAIN_COMP: &str = "FisiEfeitos Intro";
+pub const MAIN_COMP: &str = "Efeitos Intro";
 pub const SHOWCASE_3D: &str = "3D Showcase";
 
 /// Seconds → the nearest frame of the demo's 29.97 fps comps (AE keeps times frame-aligned).
@@ -116,8 +116,8 @@ fn lower_third(p: &mut Project) -> Comp {
     let mut title = text_layer(
         p,
         &c,
-        "Built with FisiEfeitos",
-        TextDoc { text: "Built with FisiEfeitos".into(), size: 40.0, style: "SemiBold".into(), justify: Justify::Center, ..Default::default() },
+        "Built with Efeitos",
+        TextDoc { text: "Built with Efeitos".into(), size: 40.0, style: "SemiBold".into(), justify: Justify::Center, ..Default::default() },
         [440.0, 914.0],
     );
     anim(&mut title, "transform/opacity", keys(&[(0.4, Value::Scalar(0.0)), (0.9, Value::Scalar(100.0))]));

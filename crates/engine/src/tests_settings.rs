@@ -736,7 +736,7 @@ fn window_graphics_is_validated() {
 fn interface_language_is_validated_persisted_and_backward_compatible() {
     let store = Arc::new(MemoryConfig::default());
     let mut s = Session { config: Some(store.clone()), ..Default::default() };
-    assert_eq!(s.prefs.general.language, "pt-br", "FisiEfeitos starts in Brazilian Portuguese");
+    assert_eq!(s.prefs.general.language, "pt-br", "Efeitos starts in Brazilian Portuguese");
     s.execute("prefs.set", json!({"key": "general.language", "value": "en"})).unwrap();
     s.execute("prefs.set", json!({"key": "general.language", "value": "ja"})).unwrap();
     assert_eq!(s.execute("prefs.get", json!({"key": "general.language"})).unwrap(), json!("ja"));

@@ -1,13 +1,13 @@
-FisiEfeitos - modo portátil (Suíte FisiLab)
+Efeitos - modo portátil (Suíte FisiLab)
 
-Enquanto este arquivo estiver ao lado de fisiefeitos.exe, o FisiEfeitos guarda as configurações,
+Enquanto este arquivo estiver ao lado de fisilab-efeitos.exe, o Efeitos guarda as configurações,
 os atalhos de teclado, os arquivos de recuperação, os registros (logs) e os plug-ins na pasta
-FisiEfeitosData, ao lado do programa, em vez de %APPDATA%\FisiEfeitos. Copie a pasta inteira para
-levar o FisiEfeitos com as suas configurações.
+FisiLabEfeitosData, ao lado do programa, em vez de %APPDATA%\FisiLab Efeitos. Copie a pasta
+inteira para levar o Efeitos com as suas configurações.
 
-O cache de disco, o cache de mídia e o áudio conformado continuam em %LOCALAPPDATA%\FisiEfeitos,
-a menos que você escolha outras pastas nas configurações (Disco).
+O cache de disco, o cache de mídia e o áudio conformado continuam em
+%LOCALAPPDATA%\FisiLab Efeitos, a menos que você escolha outras pastas nas configurações (Disco).
 
-Apague este arquivo para usar a pasta normal de configurações do usuário (%APPDATA%\FisiEfeitos).
-Se não for possível gravar em FisiEfeitosData (por exemplo, num pendrive somente leitura), o
-FisiEfeitos registra um aviso e usa %APPDATA%\FisiEfeitos.
+Apague este arquivo para usar a pasta normal de configurações do usuário (%APPDATA%\FisiLab Efeitos).
+Se não for possível gravar em FisiLabEfeitosData (por exemplo, num pendrive somente leitura), o
+Efeitos registra um aviso e usa %APPDATA%\FisiLab Efeitos.

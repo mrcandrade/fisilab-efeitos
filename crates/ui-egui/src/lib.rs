@@ -1,4 +1,4 @@
-//! The FisiEfeitos (EffectCraft) egui frontend (swappable): docking panels, the Composition viewer, the
+//! The Efeitos (EffectCraft) egui frontend (swappable): docking panels, the Composition viewer, the
 //! Timeline with property twirl-downs and keyframes, Effect Controls, Effects & Presets, Preview,
 //! Info, Character/Paragraph/Align, menus, dialogs and the control channel.
 //!
@@ -47,9 +47,9 @@ use serde_json::json;
 use state::UiState;
 use theme::Tokens;
 
-/// FisiEfeitos in the Suíte FisiLab (UFRGS): what the suite's splash screen and About window show.
+/// Efeitos in the Suíte FisiLab (UFRGS): what the suite's splash screen and About window show.
 pub const APP_INFO: fisilab_brand::AppInfo = fisilab_brand::AppInfo {
-    name: "FisiEfeitos",
+    name: "Efeitos",
     tagline: "Animação gráfica e composição",
     equivalent: "Adobe After Effects",
     version: env!("CARGO_PKG_VERSION"),

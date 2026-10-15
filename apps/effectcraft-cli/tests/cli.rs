@@ -7,7 +7,7 @@ use std::process::{Command, Stdio};
 use serde_json::{Value, json};
 
 fn bin() -> Command {
-    Command::new(env!("CARGO_BIN_EXE_fisiefeitos-cli"))
+    Command::new(env!("CARGO_BIN_EXE_fisilab-efeitos-cli"))
 }
 
 /// Run with `--json`; returns (exit code, parsed stdout).
